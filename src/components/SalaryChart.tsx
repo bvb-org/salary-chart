@@ -72,12 +72,16 @@ const SalaryChart = () => {
     const initialSalary = salaryChanges[0].salary;
     const initialSalaryPlus10 = initialSalary * 1.1;
 
-    const months = Object.entries(inflationRates).flatMap(([year, months]) => 
-      Object.entries(months).map(([month, rate]) => ({
-        date: `${year}-${month}`,
-        rate: rate
-      }))
-    );
+    const firstSalaryDate = new Date(salaryChanges[0].date);
+    const months = Object.entries(inflationRates)
+      .flatMap(([year, months]) =>
+        Object.entries(months).map(([month, rate]) => ({
+          date: `${year}-${month}`,
+          rate: rate,
+          timestamp: new Date(`${year}-${month}-01`).getTime()
+        }))
+      )
+      .filter(month => new Date(month.date).getTime() >= firstSalaryDate.getTime());
 
     months.forEach((month) => {
       const currentDate = month.date;
