@@ -69,35 +69,53 @@ const SalaryChart = () => {
     const data: ChartDataPoint[] = [];
     let cumulativeInflation = 1;
     const initialSalary = salaryChanges[0].salary;
+    const sortedChanges = [...salaryChanges].sort((a, b) =>
+      new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
 
-    // Process each salary change
-    salaryChanges.forEach((change) => {
-      const changeDate = new Date(change.date);
-      const year = changeDate.getFullYear().toString() as Year;
-      const month = changeDate.toLocaleString('en-US', { month: 'short' }) as Month;
+    // Get start and end dates
+    const startDate = new Date(sortedChanges[0].date);
+    const endDate = new Date(sortedChanges[sortedChanges.length - 1].date);
+
+    // Function to get current nominal salary for a date
+    const getNominalSalary = (currentDate: Date) => {
+      const validChanges = sortedChanges.filter(change => 
+        new Date(change.date) <= currentDate
+      );
+      return validChanges.length > 0 ? validChanges[validChanges.length - 1].salary : initialSalary;
+    };
+
+    // Process each month
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      const year = currentDate.getFullYear().toString() as Year;
+      const month = currentDate.toLocaleString('en-US', { month: 'short' }) as Month;
       
       // Get inflation rate for this month and year
       const monthRate = inflationRates[year]?.[month];
-      if (monthRate === undefined) return;
+      if (monthRate !== undefined) {
+        // Calculate inflation factor for this month
+        const inflationFactor = 1 + (monthRate / 100 / 12);
+        cumulativeInflation *= inflationFactor;
 
-      // Calculate inflation factor
-      const inflationFactor = 1 + (monthRate / 100 / 12);
-      cumulativeInflation *= inflationFactor;
+        const currentNominal = getNominalSalary(currentDate);
+        const inflationAdjustedSalary = currentNominal / cumulativeInflation;
+        const maintainPowerTarget = initialSalary * cumulativeInflation;
 
-      // Calculate adjusted values
-      const inflationAdjustedSalary = change.salary / cumulativeInflation;
-      const maintainPowerTarget = initialSalary * cumulativeInflation;
+        // Format date for display (YYYY-MM)
+        const formattedDate = `${year}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
 
-      // Format date for display (YYYY-MM-DD)
-      const formattedDate = change.date;
+        data.push({
+          date: formattedDate,
+          nominal: currentNominal,
+          adjusted: Math.round(inflationAdjustedSalary),
+          maintainPowerTarget: Math.round(maintainPowerTarget)
+        });
+      }
 
-      data.push({
-        date: formattedDate,
-        nominal: change.salary,
-        adjusted: Math.round(inflationAdjustedSalary),
-        maintainPowerTarget: Math.round(maintainPowerTarget)
-      });
-    });
+      // Move to next month
+      currentDate.setMonth(currentDate.getMonth() + 1);
+    }
 
     setChartData(data);
     const finalData = data[data.length - 1];
@@ -117,7 +135,7 @@ const SalaryChart = () => {
               <div className="flex-1 min-w-[200px]">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Data:</label>
                 <input
-                  type="date"
+                  type="month"
                   value={newDate}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setNewDate(e.target.value)}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -151,7 +169,7 @@ const SalaryChart = () => {
               {salaryChanges.map((change, index) => (
                 <div key={index} className="flex justify-between items-center bg-white p-2 rounded-md shadow-sm">
                   <span className="text-sm text-gray-600">
-                    {change.date}: {change.salary.toLocaleString()} RON
+                    {change.date.substring(0, 7)}: {change.salary.toLocaleString()} RON
                   </span>
                   <button
                     onClick={() => removeSalaryChange(index)}
@@ -205,7 +223,7 @@ const SalaryChart = () => {
                 />
                 <Tooltip
                   formatter={(value) => `${value.toLocaleString()} RON`}
-                  labelFormatter={(label) => `Data: ${label}`}
+                  labelFormatter={(label) => `Data: ${label.substring(0, 7)}`}
                   contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb' }}
                 />
                 <Legend />
