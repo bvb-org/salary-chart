@@ -76,6 +76,8 @@ const SalaryChart = () => {
     // Get start and end dates
     const startDate = new Date(sortedChanges[0].date);
     const endDate = new Date(sortedChanges[sortedChanges.length - 1].date);
+    // Extend end date by one month to show the last salary entry's effect
+    endDate.setMonth(endDate.getMonth() + 1);
 
     // Function to get current nominal salary for a date
     const getNominalSalary = (currentDate: Date) => {
