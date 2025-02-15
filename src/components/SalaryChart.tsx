@@ -13,12 +13,10 @@ interface ChartDataPoint {
   nominal: number;
   adjusted: number;
   maintainPowerTarget: number;
-  growthTarget: number;
 }
 
 interface TargetValues {
   maintainPowerTarget: number;
-  growthTarget: number;
   nominal: number;
 }
 
@@ -43,7 +41,6 @@ const SalaryChart = () => {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [targetValues, setTargetValues] = useState<TargetValues>({
     maintainPowerTarget: 0,
-    growthTarget: 0,
     nominal: 0
   });
 
@@ -72,7 +69,6 @@ const SalaryChart = () => {
     const data: ChartDataPoint[] = [];
     let cumulativeInflation = 1;
     const initialSalary = salaryChanges[0].salary;
-    const initialSalaryPlus10 = initialSalary * 1.1;
 
     // Process each salary change
     salaryChanges.forEach((change) => {
@@ -91,7 +87,6 @@ const SalaryChart = () => {
       // Calculate adjusted values
       const inflationAdjustedSalary = change.salary / cumulativeInflation;
       const maintainPowerTarget = initialSalary * cumulativeInflation;
-      const growthTarget = initialSalaryPlus10 * cumulativeInflation;
 
       // Format date for display (YYYY-MM-DD)
       const formattedDate = change.date;
@@ -100,8 +95,7 @@ const SalaryChart = () => {
         date: formattedDate,
         nominal: change.salary,
         adjusted: Math.round(inflationAdjustedSalary),
-        maintainPowerTarget: Math.round(maintainPowerTarget),
-        growthTarget: Math.round(growthTarget)
+        maintainPowerTarget: Math.round(maintainPowerTarget)
       });
     });
 
@@ -109,7 +103,6 @@ const SalaryChart = () => {
     const finalData = data[data.length - 1];
     setTargetValues({
       maintainPowerTarget: finalData.maintainPowerTarget,
-      growthTarget: finalData.growthTarget,
       nominal: finalData.nominal
     });
   };
@@ -182,10 +175,8 @@ const SalaryChart = () => {
           {chartData.length > 0 && (
             <div className="space-y-3 bg-gray-50 p-4 rounded-lg text-sm">
               <p className="text-gray-700">Target salary to maintain original purchasing power: <span className="font-medium">{targetValues.maintainPowerTarget.toLocaleString()} RON</span></p>
-              <p className="text-gray-700">Target salary for 10% real growth: <span className="font-medium">{targetValues.growthTarget.toLocaleString()} RON</span></p>
               <p className="text-gray-700">Current salary: <span className="font-medium">{targetValues.nominal.toLocaleString()} RON</span></p>
               <p className="text-gray-700">Needed increase to maintain power: <span className="font-medium">{(targetValues.maintainPowerTarget - targetValues.nominal).toLocaleString()} RON</span></p>
-              <p className="text-gray-700">Needed increase for 10% growth: <span className="font-medium">{(targetValues.growthTarget - targetValues.nominal).toLocaleString()} RON</span></p>
             </div>
           )}
         </div>
@@ -204,53 +195,44 @@ const SalaryChart = () => {
                   tick={{ fill: '#4b5563' }}
                   stroke="#9ca3af"
                 />
-                <YAxis 
+                <YAxis
                   domain={[
                     Math.min(chartData[0].nominal, chartData[0].adjusted) * 0.9,
-                    Math.ceil(targetValues.growthTarget/1000)*1000
+                    Math.ceil(targetValues.maintainPowerTarget/1000)*1000
                   ]}
                   tick={{ fill: '#4b5563' }}
                   stroke="#9ca3af"
                 />
-                <Tooltip 
+                <Tooltip
                   formatter={(value) => `${value.toLocaleString()} RON`}
                   labelFormatter={(label) => `Date: ${label}`}
                   contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb' }}
                 />
                 <Legend />
-                <Line 
-                  type="stepAfter" 
-                  dataKey="nominal" 
-                  stroke="#4f46e5" 
-                  name="Actual Nominal Salary" 
+                <Line
+                  type="stepAfter"
+                  dataKey="nominal"
+                  stroke="#4f46e5"
+                  name="Actual Nominal Salary"
                   strokeWidth={2}
                   dot={{ fill: '#4f46e5', r: 4 }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="adjusted" 
-                  stroke="#059669" 
-                  name="Inflation-Adjusted Salary" 
+                <Line
+                  type="monotone"
+                  dataKey="adjusted"
+                  stroke="#059669"
+                  name="Inflation-Adjusted Salary"
                   strokeWidth={2}
                   dot={{ fill: '#059669', r: 4 }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="maintainPowerTarget" 
-                  stroke="#d97706" 
-                  name="Target (Maintain Power)" 
+                <Line
+                  type="monotone"
+                  dataKey="maintainPowerTarget"
+                  stroke="#d97706"
+                  name="Target (Maintain Power)"
                   strokeWidth={2}
                   strokeDasharray="5 5"
                   dot={{ fill: '#d97706', r: 4 }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="growthTarget" 
-                  stroke="#dc2626" 
-                  name="Target (10% Growth)" 
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                  dot={{ fill: '#dc2626', r: 4 }}
                 />
               </LineChart>
             </ResponsiveContainer>
