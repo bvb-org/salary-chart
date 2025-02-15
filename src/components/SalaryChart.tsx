@@ -128,141 +128,148 @@ const SalaryChart = () => {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg">
-      <CardHeader className="space-y-6">
-        <CardTitle className="text-2xl font-bold text-gray-800">Evoluția Salariului cu Scenarii Țintă (RON)</CardTitle>
-        <div className="space-y-6">
-          <form onSubmit={addSalaryChange} className="space-y-4">
-            <div className="flex gap-4 flex-wrap">
-              <div className="flex-1 min-w-[200px]">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Data:</label>
-                <input
-                  type="month"
-                  value={newDate}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setNewDate(e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div className="flex-1 min-w-[200px]">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Salariu (RON):</label>
-                <input
-                  type="number"
-                  value={newSalary}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setNewSalary(e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div className="flex items-end">
-                <button
-                  type="submit"
-                  className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
-                  Adaugă Intrare
-                </button>
-              </div>
-            </div>
-          </form>
-
-          <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-gray-700">Modificări Salariale:</h3>
-            <div className="space-y-2">
-              {salaryChanges.map((change, index) => (
-                <div key={index} className="flex justify-between items-center bg-white p-2 rounded-md shadow-sm">
-                  <span className="text-sm text-gray-600">
-                    {change.date.substring(0, 7)}: {change.salary.toLocaleString()} RON
-                  </span>
-                  <button
-                    onClick={() => removeSalaryChange(index)}
-                    className="text-red-500 hover:text-red-600 text-sm font-medium focus:outline-none"
-                  >
-                    Șterge
-                  </button>
+    <Card className="w-full max-w-[1400px] mx-auto bg-white shadow-lg">
+      <div className="lg:grid lg:grid-cols-2 lg:gap-6">
+        <div className="lg:order-1">
+          <CardHeader className="space-y-6">
+            <CardTitle className="text-2xl font-bold text-gray-800">Evoluția Salariului cu Scenarii Țintă (RON)</CardTitle>
+            <div className="space-y-6">
+              <form onSubmit={addSalaryChange} className="space-y-4">
+                <div className="flex gap-4 flex-wrap">
+                  <div className="flex-1 min-w-[200px]">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Data:</label>
+                    <input
+                      type="month"
+                      value={newDate}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => setNewDate(e.target.value)}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  <div className="flex-1 min-w-[200px]">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Salariu (RON):</label>
+                    <input
+                      type="number"
+                      value={newSalary}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => setNewSalary(e.target.value)}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  <div className="flex items-end">
+                    <button
+                      type="submit"
+                      className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                      Adaugă Intrare
+                    </button>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </form>
 
-          <button
-            onClick={calculateChart}
-            className="w-full bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={salaryChanges.length === 0}
-          >
-            Calculează
-          </button>
+              <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-700">Modificări Salariale:</h3>
+                <div className="space-y-2">
+                  {salaryChanges.map((change, index) => (
+                    <div key={index} className="flex justify-between items-center bg-white p-2 rounded-md shadow-sm">
+                      <span className="text-sm text-gray-600">
+                        {change.date.substring(0, 7)}: {change.salary.toLocaleString()} RON
+                      </span>
+                      <button
+                        onClick={() => removeSalaryChange(index)}
+                        className="text-red-500 hover:text-red-600 text-sm font-medium focus:outline-none"
+                      >
+                        Șterge
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-          {chartData.length > 0 && (
-            <div className="space-y-3 bg-gray-50 p-4 rounded-lg text-sm">
-              <p className="text-gray-700">Salariu țintă pentru menținerea puterii de cumpărare: <span className="font-medium">{targetValues.maintainPowerTarget.toLocaleString()} RON</span></p>
-              <p className="text-gray-700">Salariu actual: <span className="font-medium">{targetValues.nominal.toLocaleString()} RON</span></p>
-              <p className="text-gray-700">Creștere necesară pentru menținerea puterii de cumparare: <span className="font-medium">{(targetValues.maintainPowerTarget - targetValues.nominal).toLocaleString()} RON</span></p>
+              <button
+                onClick={calculateChart}
+                className="w-full bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={salaryChanges.length === 0}
+              >
+                Calculează
+              </button>
+
+              {chartData.length > 0 && (
+                <div className="space-y-3 bg-gray-50 p-4 rounded-lg text-sm">
+                  <p className="text-gray-700">Salariu țintă pentru menținerea puterii de cumpărare: <span className="font-medium">{targetValues.maintainPowerTarget.toLocaleString()} RON</span></p>
+                  <p className="text-gray-700">Salariu actual: <span className="font-medium">{targetValues.nominal.toLocaleString()} RON</span></p>
+                  <p className="text-gray-700">Creștere necesară pentru menținerea puterii de cumparare: <span className="font-medium">{(targetValues.maintainPowerTarget - targetValues.nominal).toLocaleString()} RON</span></p>
+                </div>
+              )}
             </div>
-          )}
+          </CardHeader>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[400px]">
-          {chartData.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData} margin={{ top: 10, right: 30, left: 20, bottom: 65 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis 
-                  dataKey="date" 
-                  angle={-45} 
-                  textAnchor="end" 
-                  height={60} 
-                  tick={{ fill: '#4b5563' }}
-                  stroke="#9ca3af"
-                />
-                <YAxis
-                  domain={[
-                    Math.min(chartData[0].nominal, chartData[0].adjusted) * 0.9,
-                    Math.ceil(targetValues.maintainPowerTarget/1000)*1000
-                  ]}
-                  tick={{ fill: '#4b5563' }}
-                  stroke="#9ca3af"
-                />
-                <Tooltip
-                  formatter={(value) => `${value.toLocaleString()} RON`}
-                  labelFormatter={(label) => `Data: ${label.substring(0, 7)}`}
-                  contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb' }}
-                />
-                <Legend />
-                <Line
-                  type="stepAfter"
-                  dataKey="nominal"
-                  stroke="#4f46e5"
-                  name="Salariu Nominal Actual"
-                  strokeWidth={2}
-                  dot={{ fill: '#4f46e5', r: 1 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="adjusted"
-                  stroke="#059669"
-                  name="Salariu Ajustat la Inflație"
-                  strokeWidth={2}
-                  dot={{ fill: '#059669', r: 1 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="maintainPowerTarget"
-                  stroke="#d97706"
-                  name="Țintă (Menținere Putere)"
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                  dot={{ fill: '#d97706', r: 1 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="h-full flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg">
-              Adaugă intrări salariale și apasă Calculează pentru a genera graficul
+
+        <div className="lg:order-2">
+          <CardContent className="h-full pt-6">
+            <div className="h-[400px] lg:h-[calc(100vh-12rem)] min-h-[500px]">
+              {chartData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData} margin={{ top: 10, right: 30, left: 20, bottom: 65 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis 
+                      dataKey="date" 
+                      angle={-45} 
+                      textAnchor="end" 
+                      height={60} 
+                      tick={{ fill: '#4b5563' }}
+                      stroke="#9ca3af"
+                    />
+                    <YAxis
+                      domain={[
+                        Math.min(chartData[0].nominal, chartData[0].adjusted) * 0.9,
+                        Math.ceil(targetValues.maintainPowerTarget/1000)*1000
+                      ]}
+                      tick={{ fill: '#4b5563' }}
+                      stroke="#9ca3af"
+                    />
+                    <Tooltip
+                      formatter={(value) => `${value.toLocaleString()} RON`}
+                      labelFormatter={(label) => `Data: ${label.substring(0, 7)}`}
+                      contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb' }}
+                    />
+                    <Legend />
+                    <Line
+                      type="stepAfter"
+                      dataKey="nominal"
+                      stroke="#4f46e5"
+                      name="Salariu Nominal Actual"
+                      strokeWidth={2}
+                      dot={{ fill: '#4f46e5', r: 1 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="adjusted"
+                      stroke="#059669"
+                      name="Salariu Ajustat la Inflație"
+                      strokeWidth={2}
+                      dot={{ fill: '#059669', r: 1 }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="maintainPowerTarget"
+                      stroke="#d97706"
+                      name="Țintă (Menținere Putere)"
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      dot={{ fill: '#d97706', r: 1 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-full flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg">
+                  Adaugă intrări salariale și apasă Calculează pentru a genera graficul
+                </div>
+              )}
             </div>
-          )}
+          </CardContent>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 };
