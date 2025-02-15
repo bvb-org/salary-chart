@@ -41,12 +41,14 @@ const SalaryChart = () => {
         const data = lines.slice(1)
           .map(line => {
             const [date, , rate] = line.split(',').map(val => val.replace(/"/g, ''));
+            console.log('Parsing CSV date:', date);
             return {
               date,
               rate: parseFloat(rate)
             };
           })
           .filter(item => !isNaN(item.rate));
+        console.log('Parsed inflation data:', data);
         setInflationData(data);
       })
       .catch(error => console.error('Error loading inflation data:', error));
@@ -95,11 +97,9 @@ const SalaryChart = () => {
       new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
-    // Get start and end dates
+    // Get start date from first salary entry and end date from last inflation data point
     const startDate = new Date(sortedChanges[0].date);
-    const endDate = new Date(sortedChanges[sortedChanges.length - 1].date);
-    // Extend end date by one month to show the last salary entry's effect
-    endDate.setMonth(endDate.getMonth() + 1);
+    const endDate = new Date(inflationData[inflationData.length - 1].date);
 
     // Function to get current nominal salary for a date
     const getNominalSalary = (currentDate: Date) => {
@@ -111,14 +111,25 @@ const SalaryChart = () => {
 
     // Function to get inflation rate for a specific month
     const getInflationRate = (date: Date) => {
-      const formattedDate = date.toISOString().slice(0, 10);
-      const monthData = inflationData.find(d => d.date === formattedDate);
+      // Format the search date as YYYY-MM
+      const searchYearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      
+      // Find the matching data by comparing year and month only
+      const monthData = inflationData.find(d => {
+        const dataYearMonth = d.date.substring(0, 7); // Get YYYY-MM part
+        return dataYearMonth === searchYearMonth;
+      });
+      
       return monthData ? monthData.rate : null;
     };
 
     // Process each month
     const currentDate = new Date(startDate);
-    while (currentDate <= endDate) {
+    // Add one day to endDate to ensure we include the last month
+    const loopEndDate = new Date(endDate);
+    loopEndDate.setDate(loopEndDate.getDate() + 1);
+    
+    while (currentDate < loopEndDate) {
       // Get inflation rate for this month
       const monthRate = getInflationRate(currentDate);
       
@@ -146,12 +157,16 @@ const SalaryChart = () => {
       currentDate.setMonth(currentDate.getMonth() + 1);
     }
 
-    setChartData(data);
-    const finalData = data[data.length - 1];
-    setTargetValues({
-      maintainPowerTarget: finalData.maintainPowerTarget,
-      nominal: finalData.nominal
-    });
+    if (data.length > 0) {
+      setChartData(data);
+      const finalData = data[data.length - 1];
+      setTargetValues({
+        maintainPowerTarget: finalData.maintainPowerTarget,
+        nominal: finalData.nominal
+      });
+    } else {
+      alert('Nu s-au găsit date valide pentru perioada selectată');
+    }
 
     // Scroll to graph section
     if (graphRef.current) {
