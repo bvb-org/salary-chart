@@ -24,6 +24,8 @@ const SalaryChart = () => {
   type Month = 'Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec';
   type Year = '2021' | '2022' | '2023' | '2024';
   
+  const graphRef = React.useRef<HTMLDivElement>(null);
+  
   // Romanian inflation rates
   const inflationRates: Record<Year, Partial<Record<Month, number>>> = {
     '2021': { Oct: 7.94, Nov: 7.88, Dec: 8.19 },
@@ -125,6 +127,11 @@ const SalaryChart = () => {
       maintainPowerTarget: finalData.maintainPowerTarget,
       nominal: finalData.nominal
     });
+
+    // Scroll to graph section
+    if (graphRef.current) {
+      graphRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   return (
@@ -207,7 +214,7 @@ const SalaryChart = () => {
 
         <div className="lg:order-2">
           <CardContent className="h-full pt-6">
-            <div className="h-[400px] lg:h-[calc(100vh-12rem)] min-h-[500px]">
+            <div className="h-[400px] lg:h-[calc(100vh-12rem)] min-h-[500px]" ref={graphRef}>
               {chartData.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData} margin={{ top: 10, right: 30, left: 20, bottom: 65 }}>
