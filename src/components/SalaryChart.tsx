@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
@@ -20,22 +20,37 @@ interface TargetValues {
   nominal: number;
 }
 
+interface InflationData {
+  date: string;
+  rate: number;
+}
+
 const SalaryChart = () => {
-  type Month = 'Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec';
-  type Year = '2021' | '2022' | '2023' | '2024';
-  
   const graphRef = React.useRef<HTMLDivElement>(null);
   
-  // Romanian inflation rates
-  const inflationRates: Record<Year, Partial<Record<Month, number>>> = {
-    '2021': { Oct: 7.94, Nov: 7.88, Dec: 8.19 },
-    '2022': { Jan: 8.35, Feb: 8.53, Mar: 10.15, Apr: 13.76, May: 14.49, Jun: 15.05,
-              Jul: 14.96, Aug: 15.32, Sep: 15.88, Oct: 15.32, Nov: 16.76, Dec: 16.37 },
-    '2023': { Jan: 15.07, Feb: 15.52, Mar: 14.53, Apr: 11.23, May: 10.64, Jun: 10.25,
-              Jul: 9.44, Aug: 9.43, Sep: 8.83, Oct: 8.07, Nov: 6.72, Dec: 6.61 },
-    '2024': { Jan: 7.41, Feb: 7.23, Mar: 7.08, Apr: 6.68, May: 6.58, Jun: 6.42,
-              Jul: 6.33, Aug: 6.21, Sep: 6.07, Oct: 5.9, Nov: 5.75, Dec: 5.66 }
-  };
+  // State for inflation data
+  const [inflationData, setInflationData] = useState<InflationData[]>([]);
+  
+  // Fetch and parse CSV data
+  useEffect(() => {
+    fetch('/hicp-ro.csv')
+      .then(response => response.text())
+      .then(csvText => {
+        const lines = csvText.split('\n');
+        // Skip header row
+        const data = lines.slice(1)
+          .map(line => {
+            const [date, , rate] = line.split(',').map(val => val.replace(/"/g, ''));
+            return {
+              date,
+              rate: parseFloat(rate)
+            };
+          })
+          .filter(item => !isNaN(item.rate));
+        setInflationData(data);
+      })
+      .catch(error => console.error('Error loading inflation data:', error));
+  }, []);
 
   const [salaryChanges, setSalaryChanges] = useState<SalaryChange[]>([]);
   const [newDate, setNewDate] = useState('');
@@ -68,6 +83,11 @@ const SalaryChart = () => {
       return;
     }
 
+    if (inflationData.length === 0) {
+      alert('Se încarcă datele despre inflație...');
+      return;
+    }
+
     const data: ChartDataPoint[] = [];
     let cumulativeInflation = 1;
     const initialSalary = salaryChanges[0].salary;
@@ -89,15 +109,20 @@ const SalaryChart = () => {
       return validChanges.length > 0 ? validChanges[validChanges.length - 1].salary : initialSalary;
     };
 
+    // Function to get inflation rate for a specific month
+    const getInflationRate = (date: Date) => {
+      const formattedDate = date.toISOString().slice(0, 10);
+      const monthData = inflationData.find(d => d.date === formattedDate);
+      return monthData ? monthData.rate : null;
+    };
+
     // Process each month
     const currentDate = new Date(startDate);
     while (currentDate <= endDate) {
-      const year = currentDate.getFullYear().toString() as Year;
-      const month = currentDate.toLocaleString('en-US', { month: 'short' }) as Month;
+      // Get inflation rate for this month
+      const monthRate = getInflationRate(currentDate);
       
-      // Get inflation rate for this month and year
-      const monthRate = inflationRates[year]?.[month];
-      if (monthRate !== undefined) {
+      if (monthRate !== null) {
         // Calculate inflation factor for this month
         const inflationFactor = 1 + (monthRate / 100 / 12);
         cumulativeInflation *= inflationFactor;
@@ -107,7 +132,7 @@ const SalaryChart = () => {
         const maintainPowerTarget = initialSalary * cumulativeInflation;
 
         // Format date for display (YYYY-MM)
-        const formattedDate = `${year}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+        const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
 
         data.push({
           date: formattedDate,
