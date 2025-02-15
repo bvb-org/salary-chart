@@ -23,14 +23,17 @@ interface TargetValues {
 }
 
 const SalaryChart = () => {
+  type Month = 'Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec';
+  type Year = '2021' | '2022' | '2023' | '2024';
+  
   // Romanian inflation rates
-  const inflationRates = {
+  const inflationRates: Record<Year, Partial<Record<Month, number>>> = {
     '2021': { Oct: 7.94, Nov: 7.88, Dec: 8.19 },
-    '2022': { Jan: 8.35, Feb: 8.53, Mar: 10.15, Apr: 13.76, May: 14.49, Jun: 15.05, 
+    '2022': { Jan: 8.35, Feb: 8.53, Mar: 10.15, Apr: 13.76, May: 14.49, Jun: 15.05,
               Jul: 14.96, Aug: 15.32, Sep: 15.88, Oct: 15.32, Nov: 16.76, Dec: 16.37 },
-    '2023': { Jan: 15.07, Feb: 15.52, Mar: 14.53, Apr: 11.23, May: 10.64, Jun: 10.25, 
+    '2023': { Jan: 15.07, Feb: 15.52, Mar: 14.53, Apr: 11.23, May: 10.64, Jun: 10.25,
               Jul: 9.44, Aug: 9.43, Sep: 8.83, Oct: 8.07, Nov: 6.72, Dec: 6.61 },
-    '2024': { Jan: 7.41, Feb: 7.23, Mar: 7.08, Apr: 6.68, May: 6.58, Jun: 6.42, 
+    '2024': { Jan: 7.41, Feb: 7.23, Mar: 7.08, Apr: 6.68, May: 6.58, Jun: 6.42,
               Jul: 6.33, Aug: 6.21, Sep: 6.07, Oct: 5.9, Nov: 5.75, Dec: 5.66 }
   };
 
@@ -67,40 +70,35 @@ const SalaryChart = () => {
     }
 
     const data: ChartDataPoint[] = [];
-    let currentSalaryIndex = 0;
     let cumulativeInflation = 1;
     const initialSalary = salaryChanges[0].salary;
     const initialSalaryPlus10 = initialSalary * 1.1;
 
-    const firstSalaryDate = new Date(salaryChanges[0].date);
-    const months = Object.entries(inflationRates)
-      .flatMap(([year, months]) =>
-        Object.entries(months).map(([month, rate]) => ({
-          date: `${year}-${month}`,
-          rate: rate,
-          timestamp: new Date(`${year}-${month}-01`).getTime()
-        }))
-      )
-      .filter(month => new Date(month.date).getTime() >= firstSalaryDate.getTime());
+    // Process each salary change
+    salaryChanges.forEach((change) => {
+      const changeDate = new Date(change.date);
+      const year = changeDate.getFullYear().toString() as Year;
+      const month = changeDate.toLocaleString('en-US', { month: 'short' }) as Month;
+      
+      // Get inflation rate for this month and year
+      const monthRate = inflationRates[year]?.[month];
+      if (monthRate === undefined) return;
 
-    months.forEach((month) => {
-      const currentDate = month.date;
-      while (currentSalaryIndex < salaryChanges.length - 1 && 
-             salaryChanges[currentSalaryIndex + 1].date <= currentDate) {
-        currentSalaryIndex++;
-      }
-      const currentSalary = salaryChanges[currentSalaryIndex].salary;
+      // Calculate inflation factor
+      const inflationFactor = 1 + (monthRate / 100 / 12);
+      cumulativeInflation *= inflationFactor;
 
-      const monthlyInflationFactor = 1 + (month.rate / 100 / 12);
-      cumulativeInflation *= monthlyInflationFactor;
-
-      const inflationAdjustedSalary = currentSalary / cumulativeInflation;
+      // Calculate adjusted values
+      const inflationAdjustedSalary = change.salary / cumulativeInflation;
       const maintainPowerTarget = initialSalary * cumulativeInflation;
       const growthTarget = initialSalaryPlus10 * cumulativeInflation;
 
+      // Format date for display (YYYY-MM-DD)
+      const formattedDate = change.date;
+
       data.push({
-        date: currentDate,
-        nominal: currentSalary,
+        date: formattedDate,
+        nominal: change.salary,
         adjusted: Math.round(inflationAdjustedSalary),
         maintainPowerTarget: Math.round(maintainPowerTarget),
         growthTarget: Math.round(growthTarget)
