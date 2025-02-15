@@ -62,7 +62,7 @@ const SalaryChart = () => {
 
   const calculateChart = () => {
     if (salaryChanges.length === 0) {
-      alert('Please add at least one salary entry');
+      alert('Te rog adaugă cel puțin o intrare salarială');
       return;
     }
 
@@ -110,12 +110,12 @@ const SalaryChart = () => {
   return (
     <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg">
       <CardHeader className="space-y-6">
-        <CardTitle className="text-2xl font-bold text-gray-800">Salary Evolution with Target Scenarios (RON)</CardTitle>
+        <CardTitle className="text-2xl font-bold text-gray-800">Evoluția Salariului cu Scenarii Țintă (RON)</CardTitle>
         <div className="space-y-6">
           <form onSubmit={addSalaryChange} className="space-y-4">
             <div className="flex gap-4 flex-wrap">
               <div className="flex-1 min-w-[200px]">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date:</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Data:</label>
                 <input
                   type="date"
                   value={newDate}
@@ -125,7 +125,7 @@ const SalaryChart = () => {
                 />
               </div>
               <div className="flex-1 min-w-[200px]">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Salary (RON):</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Salariu (RON):</label>
                 <input
                   type="number"
                   value={newSalary}
@@ -139,14 +139,14 @@ const SalaryChart = () => {
                   type="submit"
                   className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
-                  Add Entry
+                  Adaugă Intrare
                 </button>
               </div>
             </div>
           </form>
 
           <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-gray-700">Salary Changes:</h3>
+            <h3 className="text-sm font-medium text-gray-700">Modificări Salariale:</h3>
             <div className="space-y-2">
               {salaryChanges.map((change, index) => (
                 <div key={index} className="flex justify-between items-center bg-white p-2 rounded-md shadow-sm">
@@ -157,7 +157,7 @@ const SalaryChart = () => {
                     onClick={() => removeSalaryChange(index)}
                     className="text-red-500 hover:text-red-600 text-sm font-medium focus:outline-none"
                   >
-                    Remove
+                    Șterge
                   </button>
                 </div>
               ))}
@@ -169,14 +169,14 @@ const SalaryChart = () => {
             className="w-full bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={salaryChanges.length === 0}
           >
-            Calculate
+            Calculează
           </button>
 
           {chartData.length > 0 && (
             <div className="space-y-3 bg-gray-50 p-4 rounded-lg text-sm">
-              <p className="text-gray-700">Target salary to maintain original purchasing power: <span className="font-medium">{targetValues.maintainPowerTarget.toLocaleString()} RON</span></p>
-              <p className="text-gray-700">Current salary: <span className="font-medium">{targetValues.nominal.toLocaleString()} RON</span></p>
-              <p className="text-gray-700">Needed increase to maintain power: <span className="font-medium">{(targetValues.maintainPowerTarget - targetValues.nominal).toLocaleString()} RON</span></p>
+              <p className="text-gray-700">Salariu țintă pentru menținerea puterii de cumpărare: <span className="font-medium">{targetValues.maintainPowerTarget.toLocaleString()} RON</span></p>
+              <p className="text-gray-700">Salariu actual: <span className="font-medium">{targetValues.nominal.toLocaleString()} RON</span></p>
+              <p className="text-gray-700">Creștere necesară pentru menținerea puterii de cumparare: <span className="font-medium">{(targetValues.maintainPowerTarget - targetValues.nominal).toLocaleString()} RON</span></p>
             </div>
           )}
         </div>
@@ -205,7 +205,7 @@ const SalaryChart = () => {
                 />
                 <Tooltip
                   formatter={(value) => `${value.toLocaleString()} RON`}
-                  labelFormatter={(label) => `Date: ${label}`}
+                  labelFormatter={(label) => `Data: ${label}`}
                   contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb' }}
                 />
                 <Legend />
@@ -213,7 +213,7 @@ const SalaryChart = () => {
                   type="stepAfter"
                   dataKey="nominal"
                   stroke="#4f46e5"
-                  name="Actual Nominal Salary"
+                  name="Salariu Nominal Actual"
                   strokeWidth={2}
                   dot={{ fill: '#4f46e5', r: 1 }}
                 />
@@ -221,7 +221,7 @@ const SalaryChart = () => {
                   type="monotone"
                   dataKey="adjusted"
                   stroke="#059669"
-                  name="Inflation-Adjusted Salary"
+                  name="Salariu Ajustat la Inflație"
                   strokeWidth={2}
                   dot={{ fill: '#059669', r: 1 }}
                 />
@@ -229,7 +229,7 @@ const SalaryChart = () => {
                   type="monotone"
                   dataKey="maintainPowerTarget"
                   stroke="#d97706"
-                  name="Target (Maintain Power)"
+                  name="Țintă (Menținere Putere)"
                   strokeWidth={2}
                   strokeDasharray="5 5"
                   dot={{ fill: '#d97706', r: 1 }}
@@ -238,7 +238,7 @@ const SalaryChart = () => {
             </ResponsiveContainer>
           ) : (
             <div className="h-full flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg">
-              Add salary entries and click Calculate to generate the chart
+              Adaugă intrări salariale și apasă Calculează pentru a genera graficul
             </div>
           )}
         </div>
