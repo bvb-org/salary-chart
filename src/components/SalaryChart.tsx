@@ -115,36 +115,36 @@ const SalaryChart = () => {
   };
 
   return (
-    <Card className="w-full max-w-4xl">
-      <CardHeader>
-        <CardTitle>Salary Evolution with Target Scenarios (RON)</CardTitle>
-        <div className="space-y-4">
-          <form onSubmit={addSalaryChange} className="space-y-2">
-            <div className="flex gap-2 flex-wrap">
-              <div>
-                <label className="block text-sm font-medium">Date:</label>
+    <Card className="w-full max-w-4xl mx-auto bg-white shadow-lg">
+      <CardHeader className="space-y-6">
+        <CardTitle className="text-2xl font-bold text-gray-800">Salary Evolution with Target Scenarios (RON)</CardTitle>
+        <div className="space-y-6">
+          <form onSubmit={addSalaryChange} className="space-y-4">
+            <div className="flex gap-4 flex-wrap">
+              <div className="flex-1 min-w-[200px]">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date:</label>
                 <input
                   type="date"
                   value={newDate}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setNewDate(e.target.value)}
-                  className="border rounded px-2 py-1"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium">Salary (RON):</label>
+              <div className="flex-1 min-w-[200px]">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Salary (RON):</label>
                 <input
                   type="number"
                   value={newSalary}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setNewSalary(e.target.value)}
-                  className="border rounded px-2 py-1"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   required
                 />
               </div>
               <div className="flex items-end">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+                  className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
                   Add Entry
                 </button>
@@ -152,17 +152,17 @@ const SalaryChart = () => {
             </div>
           </form>
 
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium">Salary Changes:</h3>
-            <div className="space-y-1">
+          <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
+            <h3 className="text-sm font-medium text-gray-700">Salary Changes:</h3>
+            <div className="space-y-2">
               {salaryChanges.map((change, index) => (
-                <div key={index} className="flex gap-2 items-center">
-                  <span className="text-sm">
+                <div key={index} className="flex justify-between items-center bg-white p-2 rounded-md shadow-sm">
+                  <span className="text-sm text-gray-600">
                     {change.date}: {change.salary.toLocaleString()} RON
                   </span>
                   <button
                     onClick={() => removeSalaryChange(index)}
-                    className="text-red-500 text-sm hover:text-red-600"
+                    className="text-red-500 hover:text-red-600 text-sm font-medium focus:outline-none"
                   >
                     Remove
                   </button>
@@ -173,73 +173,89 @@ const SalaryChart = () => {
 
           <button
             onClick={calculateChart}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            className="w-full bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={salaryChanges.length === 0}
           >
             Calculate
           </button>
 
           {chartData.length > 0 && (
-            <div className="text-sm space-y-2">
-              <p>Target salary to maintain original purchasing power: {targetValues.maintainPowerTarget.toLocaleString()} RON</p>
-              <p>Target salary for 10% real growth: {targetValues.growthTarget.toLocaleString()} RON</p>
-              <p>Current salary: {targetValues.nominal.toLocaleString()} RON</p>
-              <p>Needed increase to maintain power: {(targetValues.maintainPowerTarget - targetValues.nominal).toLocaleString()} RON</p>
-              <p>Needed increase for 10% growth: {(targetValues.growthTarget - targetValues.nominal).toLocaleString()} RON</p>
+            <div className="space-y-3 bg-gray-50 p-4 rounded-lg text-sm">
+              <p className="text-gray-700">Target salary to maintain original purchasing power: <span className="font-medium">{targetValues.maintainPowerTarget.toLocaleString()} RON</span></p>
+              <p className="text-gray-700">Target salary for 10% real growth: <span className="font-medium">{targetValues.growthTarget.toLocaleString()} RON</span></p>
+              <p className="text-gray-700">Current salary: <span className="font-medium">{targetValues.nominal.toLocaleString()} RON</span></p>
+              <p className="text-gray-700">Needed increase to maintain power: <span className="font-medium">{(targetValues.maintainPowerTarget - targetValues.nominal).toLocaleString()} RON</span></p>
+              <p className="text-gray-700">Needed increase for 10% growth: <span className="font-medium">{(targetValues.growthTarget - targetValues.nominal).toLocaleString()} RON</span></p>
             </div>
           )}
         </div>
       </CardHeader>
       <CardContent>
-        <div className="h-96">
+        <div className="h-[400px]">
           {chartData.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" angle={-45} textAnchor="end" height={60} />
-                <YAxis domain={[
-                  Math.min(chartData[0].nominal, chartData[0].adjusted) * 0.9,
-                  Math.ceil(targetValues.growthTarget/1000)*1000
-                ]} />
+              <LineChart data={chartData} margin={{ top: 10, right: 30, left: 20, bottom: 65 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis 
+                  dataKey="date" 
+                  angle={-45} 
+                  textAnchor="end" 
+                  height={60} 
+                  tick={{ fill: '#4b5563' }}
+                  stroke="#9ca3af"
+                />
+                <YAxis 
+                  domain={[
+                    Math.min(chartData[0].nominal, chartData[0].adjusted) * 0.9,
+                    Math.ceil(targetValues.growthTarget/1000)*1000
+                  ]}
+                  tick={{ fill: '#4b5563' }}
+                  stroke="#9ca3af"
+                />
                 <Tooltip 
                   formatter={(value) => `${value.toLocaleString()} RON`}
                   labelFormatter={(label) => `Date: ${label}`}
+                  contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb' }}
                 />
                 <Legend />
                 <Line 
                   type="stepAfter" 
                   dataKey="nominal" 
-                  stroke="#8884d8" 
+                  stroke="#4f46e5" 
                   name="Actual Nominal Salary" 
                   strokeWidth={2}
+                  dot={{ fill: '#4f46e5', r: 4 }}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="adjusted" 
-                  stroke="#82ca9d" 
+                  stroke="#059669" 
                   name="Inflation-Adjusted Salary" 
                   strokeWidth={2}
+                  dot={{ fill: '#059669', r: 4 }}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="maintainPowerTarget" 
-                  stroke="#ff7300" 
+                  stroke="#d97706" 
                   name="Target (Maintain Power)" 
                   strokeWidth={2}
                   strokeDasharray="5 5"
+                  dot={{ fill: '#d97706', r: 4 }}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="growthTarget" 
-                  stroke="#ff0000" 
+                  stroke="#dc2626" 
                   name="Target (10% Growth)" 
                   strokeWidth={2}
                   strokeDasharray="5 5"
+                  dot={{ fill: '#dc2626', r: 4 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <div className="h-full flex items-center justify-center text-gray-500">
+            <div className="h-full flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg">
               Add salary entries and click Calculate to generate the chart
             </div>
           )}
