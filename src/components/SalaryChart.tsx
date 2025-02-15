@@ -34,12 +34,9 @@ const SalaryChart = () => {
               Jul: 6.33, Aug: 6.21, Sep: 6.07, Oct: 5.9, Nov: 5.75, Dec: 5.66 }
   };
 
-  const [salaryChanges, setSalaryChanges] = useState<SalaryChange[]>([
-    { date: '2021-11-22', salary: 9123 }
-  ]);
+  const [salaryChanges, setSalaryChanges] = useState<SalaryChange[]>([]);
   const [newDate, setNewDate] = useState('');
   const [newSalary, setNewSalary] = useState('');
-  const [initialSalary, setInitialSalary] = useState(10000);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [targetValues, setTargetValues] = useState<TargetValues>({
     maintainPowerTarget: 0,
@@ -64,9 +61,15 @@ const SalaryChart = () => {
   };
 
   const calculateChart = () => {
+    if (salaryChanges.length === 0) {
+      alert('Please add at least one salary entry');
+      return;
+    }
+
     const data: ChartDataPoint[] = [];
     let currentSalaryIndex = 0;
     let cumulativeInflation = 1;
+    const initialSalary = salaryChanges[0].salary;
     const initialSalaryPlus10 = initialSalary * 1.1;
 
     const months = Object.entries(inflationRates).flatMap(([year, months]) => 
@@ -114,16 +117,6 @@ const SalaryChart = () => {
       <CardHeader>
         <CardTitle>Salary Evolution with Target Scenarios (RON)</CardTitle>
         <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium">Initial Salary (RON):</label>
-            <input
-              type="number"
-              value={initialSalary}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setInitialSalary(Number(e.target.value))}
-              className="border rounded px-2 py-1 w-full max-w-xs"
-            />
-          </div>
-          
           <form onSubmit={addSalaryChange} className="space-y-2">
             <div className="flex gap-2 flex-wrap">
               <div>
@@ -168,9 +161,8 @@ const SalaryChart = () => {
                   <button
                     onClick={() => removeSalaryChange(index)}
                     className="text-red-500 text-sm hover:text-red-600"
-                    disabled={index === 0}
                   >
-                    {index === 0 ? '(initial)' : 'Remove'}
+                    Remove
                   </button>
                 </div>
               ))}
@@ -180,6 +172,7 @@ const SalaryChart = () => {
           <button
             onClick={calculateChart}
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            disabled={salaryChanges.length === 0}
           >
             Calculate
           </button>
@@ -245,7 +238,7 @@ const SalaryChart = () => {
             </ResponsiveContainer>
           ) : (
             <div className="h-full flex items-center justify-center text-gray-500">
-              Click Calculate to generate the chart
+              Add salary entries and click Calculate to generate the chart
             </div>
           )}
         </div>
