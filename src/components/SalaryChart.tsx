@@ -215,7 +215,7 @@ const SalaryChart = () => {
                   stroke="#4f46e5"
                   name="Actual Nominal Salary"
                   strokeWidth={2}
-                  dot={{ fill: '#4f46e5', r: 4 }}
+                  dot={{ fill: '#4f46e5', r: 1 }}
                 />
                 <Line
                   type="monotone"
@@ -223,7 +223,7 @@ const SalaryChart = () => {
                   stroke="#059669"
                   name="Inflation-Adjusted Salary"
                   strokeWidth={2}
-                  dot={{ fill: '#059669', r: 4 }}
+                  dot={{ fill: '#059669', r: 1 }}
                 />
                 <Line
                   type="monotone"
@@ -232,7 +232,7 @@ const SalaryChart = () => {
                   name="Target (Maintain Power)"
                   strokeWidth={2}
                   strokeDasharray="5 5"
-                  dot={{ fill: '#d97706', r: 4 }}
+                  dot={{ fill: '#d97706', r: 1 }}
                 />
               </LineChart>
             </ResponsiveContainer>
