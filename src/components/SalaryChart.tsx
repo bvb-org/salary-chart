@@ -425,7 +425,7 @@ const SalaryChart = () => {
                           return [`${value.toLocaleString()} RON`, 'Valoarea Reală'];
                         }
                         if (name === 'Ce Ai Avea Nevoie') {
-                          return [`${value.toLocaleString()} RON`, 'Necesar Pentru Menținerea Puterii de Cumpărare'];
+                          return [`${value.toLocaleString()} RON`, 'Inflatia dupa marire salariu'];
                         }
                         return [`${value.toLocaleString()} RON`, name];
                       }}
@@ -456,7 +456,7 @@ const SalaryChart = () => {
                       stroke="#4f46e5"
                       name="Ce Primești"
                       strokeWidth={3}
-                      dot={{ fill: '#4f46e5', r: 2 }}
+                      dot={{ fill: '#4f46e5', r: 1 }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
                     />
                     <Line
@@ -465,7 +465,7 @@ const SalaryChart = () => {
                       stroke="#059669"
                       name="Ce Poți Cumpăra"
                       strokeWidth={2}
-                      dot={{ fill: '#059669', r: 2 }}
+                      dot={{ fill: '#059669', r: 1 }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
                     />
                     <Line
@@ -475,7 +475,7 @@ const SalaryChart = () => {
                       name="Ce Ai Avea Nevoie"
                       strokeWidth={2}
                       strokeDasharray="5 5"
-                      dot={{ fill: '#d97706', r: 2 }}
+                      dot={{ fill: '#d97706', r: 1 }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
                     />
                   </LineChart>
