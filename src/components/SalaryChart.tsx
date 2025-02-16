@@ -451,7 +451,7 @@ const SalaryChart = () => {
           <CardContent className="h-full pt-6">
             {chartData.length > 0 && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <h3 className="text-lg font-semibold text-red-700 mb-2">
+                <h3 className="text-lg font-semibold text-red-700 mb-2 text-center">
                   ⚠️ Impactul Inflației
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -463,9 +463,9 @@ const SalaryChart = () => {
                       </span>
                     </p>
                     <p className="text-sm text-red-600 mt-1">
-                      💡 <span className="font-bold">Raportat la primul tău salariu:</span><br />
-                      Din actualul salariu de {targetValues.nominal.toLocaleString()} RON,{' '}
-                      poți cumpăra bunuri în valoare de <span className="font-medium">doar {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON</span> 📉
+                      💡 <span className="font-bold">Calculand inflația de la primul tău salariu,</span><br />
+                      Astăzi, din {targetValues.nominal.toLocaleString()} RON,{' '}
+                      poți cumpăra bunuri în valoare de doar <span className="font-medium"> {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON</span> 📉
                     </p>
                   </div>
                   <div>
