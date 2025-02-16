@@ -543,9 +543,9 @@ const SalaryChart = () => {
 
         <div>
           <CardContent className="pt-6">
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[800px]">
               {chartData.length > 0 && (
-                <div className="h-[200px]">
+                <div className="h-[500px]">
                   <p className="text-sm text-gray-600 mb-2">📊 <strong>Pierderea Puterii de Cumpărare în Timp:</strong></p>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
@@ -579,10 +579,10 @@ const SalaryChart = () => {
                   </ResponsiveContainer>
                 </div>
               )}
-              <div className="h-[500px] lg:h-[600px] relative" ref={graphRef}>
+              <div className="h-[400px] relative" ref={graphRef}>
                 {chartData.length > 0 ? (
                   <>
-                    <ResponsiveContainer width="100%" height="70%">
+                    <ResponsiveContainer width="100%" height="100%">
                       <LineChart
                         data={chartData}
                         margin={{ top: 30, right: 30, left: 20, bottom: 65 }}
