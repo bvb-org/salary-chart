@@ -93,10 +93,13 @@ const SalaryChart = () => {
 
     const data: ChartDataPoint[] = [];
     let cumulativeInflation = 1;
-    const initialSalary = salaryChanges[0].salary;
     const sortedChanges = [...salaryChanges].sort((a, b) =>
       new Date(a.date).getTime() - new Date(b.date).getTime()
     );
+
+    // Track inflation since last salary change
+    let lastChangeIndex = 0;
+    let lastChangeCumulativeInflation = 1;
 
     // Get start date from first salary entry and end date from last inflation data point
     const startDate = new Date(sortedChanges[0].date);
@@ -130,6 +133,8 @@ const SalaryChart = () => {
     const loopEndDate = new Date(endDate);
     loopEndDate.setDate(loopEndDate.getDate() + 1);
     
+    let lastChangeSalary = sortedChanges[0].salary;
+    
     while (currentDate < loopEndDate) {
       // Get inflation rate for this month
       const monthRate = getInflationRate(currentDate);
@@ -140,8 +145,18 @@ const SalaryChart = () => {
         cumulativeInflation *= inflationFactor;
 
         const currentNominal = getNominalSalary(currentDate);
+        
+        // If there's a salary change this month, update tracking variables
+        if (currentNominal !== lastChangeSalary) {
+          lastChangeSalary = currentNominal;
+          lastChangeCumulativeInflation = cumulativeInflation;
+        }
+
+        // Calculate inflation since last salary change
+        const inflationSinceLastChange = cumulativeInflation / lastChangeCumulativeInflation;
+        
         const inflationAdjustedSalary = currentNominal / cumulativeInflation;
-        const maintainPowerTarget = initialSalary * cumulativeInflation;
+        const maintainPowerTarget = currentNominal * inflationSinceLastChange;
 
         // Format date for display (MM-YYYY)
         const formattedDate = `${String(currentDate.getMonth() + 1).padStart(2, '0')}-${currentDate.getFullYear()}`;
