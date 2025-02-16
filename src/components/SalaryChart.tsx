@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, BarChart, Bar, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, BarChart, Bar } from 'recharts';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 interface SalaryChange {
@@ -434,20 +434,6 @@ const SalaryChart = () => {
                       onMouseLeave={() => setHoveredData(chartData[chartData.length - 1])}
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                      <Tooltip
-                        content={({ active, payload }) => {
-                          if (active && payload && payload.length) {
-                            return (
-                              <div className="bg-white p-2 border border-gray-200 rounded shadow">
-                                <p className="text-sm text-gray-700">
-                                  {`${payload[0].payload.date}: ${payload[0].value}%`}
-                                </p>
-                              </div>
-                            );
-                          }
-                          return null;
-                        }}
-                      />
                       <XAxis
                         dataKey="date"
                         angle={-45}
@@ -534,29 +520,6 @@ const SalaryChart = () => {
                           strokeDasharray="5 5"
                           dot={{ fill: '#d97706', r: 1 }}
                           activeDot={{ r: 6, strokeWidth: 0 }}
-                        />
-                        <Tooltip
-                          content={({ active, payload }) => {
-                            if (active && payload && payload.length) {
-                              return (
-                                <div className="bg-white p-3 border border-gray-200 rounded shadow space-y-2">
-                                  <p className="text-sm font-medium text-gray-700">{payload[0].payload.date}</p>
-                                  <div className="space-y-1">
-                                    <p className="text-sm text-indigo-600">
-                                      Salariul Tău: {payload[0].payload.nominal.toLocaleString()} RON
-                                    </p>
-                                    <p className="text-sm text-emerald-600">
-                                      Ajustat la Inflație: {payload[0].payload.adjusted.toLocaleString()} RON
-                                    </p>
-                                    <p className="text-sm text-amber-600">
-                                      Necesar: {payload[0].payload.maintainPowerTarget.toLocaleString()} RON
-                                    </p>
-                                  </div>
-                                </div>
-                              );
-                            }
-                            return null;
-                          }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
