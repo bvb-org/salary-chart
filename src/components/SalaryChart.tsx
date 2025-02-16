@@ -98,7 +98,6 @@ const SalaryChart = () => {
     );
 
     // Track inflation since last salary change
-    let lastChangeIndex = 0;
     let lastChangeCumulativeInflation = 1;
 
     // Get start date from first salary entry and end date from last inflation data point
@@ -110,7 +109,7 @@ const SalaryChart = () => {
       const validChanges = sortedChanges.filter(change => 
         new Date(change.date) <= currentDate
       );
-      return validChanges.length > 0 ? validChanges[validChanges.length - 1].salary : initialSalary;
+      return validChanges.length > 0 ? validChanges[validChanges.length - 1].salary : 0;
     };
 
     // Function to get inflation rate for a specific month
@@ -325,24 +324,6 @@ const SalaryChart = () => {
                       <li className="flex items-center text-gray-700">
                         <span className="w-32">Același coș azi:</span>
                         <span className="font-medium">{targetValues.maintainPowerTarget.toLocaleString()} RON</span>
-                      </li>
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-base font-semibold text-gray-800 mb-2">Rezumat</h3>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex justify-between text-gray-700">
-                        <span>Salariul tău actual:</span>
-                        <span className="font-medium">{targetValues.nominal.toLocaleString()} RON</span>
-                      </li>
-                      <li className="flex justify-between text-gray-700">
-                        <span>Valoarea reală:</span>
-                        <span className="font-medium">{Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON</span>
-                      </li>
-                      <li className="flex justify-between text-red-600 font-medium border-t border-gray-200 pt-2 mt-2">
-                        <span>Pierdere lunară:</span>
-                        <span>{(targetValues.nominal - Math.round(chartData[chartData.length - 1].adjusted)).toLocaleString()} RON</span>
                       </li>
                     </ul>
                   </div>
