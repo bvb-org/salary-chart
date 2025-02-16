@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, BarChart, Bar, Tooltip } from 'recharts';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 interface SalaryChange {
@@ -446,6 +446,12 @@ const SalaryChart = () => {
                         tick={{ fill: '#4b5563' }}
                         stroke="#9ca3af"
                         label={{ value: '%', position: 'insideLeft', offset: 0 }}
+                      />
+                      <Tooltip
+                        formatter={(value: number) => [`${value.toFixed(1)}%`, 'Pierdere Putere de Cumpărare']}
+                        labelFormatter={(label: string) => `Data: ${label}`}
+                        contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', borderRadius: '6px', border: '1px solid #ef4444' }}
+                        labelStyle={{ color: '#374151', fontWeight: 'bold' }}
                       />
                       <Bar dataKey="purchasingPowerLoss" fill="#ef4444" name="Pierdere Putere de Cumpărare" />
                     </BarChart>
