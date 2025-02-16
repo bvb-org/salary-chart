@@ -352,8 +352,45 @@ const SalaryChart = () => {
                       params.append(`salary${index}`, change.salary.toString());
                     });
                     const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
-                    navigator.clipboard.writeText(url);
-                    alert('Link-ul a fost copiat în clipboard! Îl poți distribui pentru a împărtăși datele tale salariale.');
+                    
+                    // Try using the clipboard API first
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                      navigator.clipboard.writeText(url)
+                        .then(() => {
+                          alert('Link-ul a fost copiat în clipboard! Îl poți distribui pentru a împărtăși datele tale salariale.');
+                        })
+                        .catch(() => {
+                          // Fallback to manual copy method
+                          const textarea = document.createElement('textarea');
+                          textarea.value = url;
+                          textarea.style.position = 'fixed';
+                          textarea.style.opacity = '0';
+                          document.body.appendChild(textarea);
+                          textarea.select();
+                          try {
+                            document.execCommand('copy');
+                            alert('Link-ul a fost copiat în clipboard! Îl poți distribui pentru a împărtăși datele tale salariale.');
+                          } catch {
+                            alert('Nu am putut copia link-ul automat. Te rog selectează și copiază manual:\n\n' + url);
+                          }
+                          document.body.removeChild(textarea);
+                        });
+                    } else {
+                      // Fallback for browsers without clipboard API
+                      const textarea = document.createElement('textarea');
+                      textarea.value = url;
+                      textarea.style.position = 'fixed';
+                      textarea.style.opacity = '0';
+                      document.body.appendChild(textarea);
+                      textarea.select();
+                      try {
+                        document.execCommand('copy');
+                        alert('Link-ul a fost copiat în clipboard! Îl poți distribui pentru a împărtăși datele tale salariale.');
+                      } catch {
+                        alert('Nu am putut copia link-ul automat. Te rog selectează și copiază manual:\n\n' + url);
+                      }
+                      document.body.removeChild(textarea);
+                    }
                   }}
                   className="flex-1 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={salaryChanges.length === 0}
