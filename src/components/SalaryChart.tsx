@@ -474,7 +474,7 @@ const SalaryChart = () => {
                     </p>
                     {chartData.length > 24 && (
                       <div className="space-y-2">
-                        {[3, 2, 1, 0].map(yearsAgo => {
+                        {[2, 1, 0].map(yearsAgo => {
                           const year = new Date().getFullYear() - yearsAgo;
                           
                           // Find data points for this calendar year
