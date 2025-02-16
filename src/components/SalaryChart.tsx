@@ -470,7 +470,7 @@ const SalaryChart = () => {
                   </div>
                   <div>
                     <p className="text-gray-700 font-medium mb-2">
-                      Ai bătut inflația în ultimii 3 ani?
+                      <strong>Ai bătut inflația în ultimii 3 ani?</strong>
                     </p>
                     {chartData.length > 24 && (
                       <div className="space-y-2">
@@ -529,7 +529,7 @@ const SalaryChart = () => {
             <div className="space-y-6">
               {chartData.length > 0 && (
                 <div className="h-[200px]">
-                  <p className="text-sm text-gray-600 mb-2">📊 Pierderea Puterii de Cumpărare în Timp:</p>
+                  <p className="text-sm text-gray-600 mb-2">📊 <strong>Pierderea Puterii de Cumpărare în Timp:</strong></p>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={chartData}
