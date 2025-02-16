@@ -530,6 +530,12 @@ const SalaryChart = () => {
                       </LineChart>
                     </ResponsiveContainer>
                     <div className="mt-4 space-y-2 bg-gray-50 p-4 rounded-lg">
+                      <p
+                        key={`date-${(hoveredData || chartData[chartData.length - 1]).date}`}
+                        className="font-bold text-gray-700 mb-2 transform"
+                      >
+                        {(hoveredData || chartData[chartData.length - 1]).date}
+                      </p>
                       <div className="flex items-center gap-2 text-indigo-600">
                         <span className="w-3 h-3 rounded-full bg-[#4f46e5]"></span>
                         <span className="font-medium">💰 Salariul Tău:</span>
