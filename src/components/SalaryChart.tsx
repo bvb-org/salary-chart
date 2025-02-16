@@ -14,6 +14,7 @@ interface ChartDataPoint {
   adjusted: number;
   maintainPowerTarget: number;
   purchasingPowerLoss: number;
+  rate: number;
 }
 
 interface TargetValues {
@@ -169,7 +170,8 @@ const SalaryChart = () => {
           nominal: currentNominal,
           adjusted: Math.round(inflationAdjustedSalary),
           maintainPowerTarget: Math.round(maintainPowerTarget),
-          purchasingPowerLoss: Math.round(purchasingPowerLoss * 10) / 10
+          purchasingPowerLoss: Math.round(purchasingPowerLoss * 10) / 10,
+          rate: monthRate
         });
       }
 
@@ -366,19 +368,27 @@ const SalaryChart = () => {
                     </p>
                     {chartData.length > 24 && (
                       <div className="space-y-2">
-                        {[2, 1, 0].map(yearsAgo => {
-                          const currentIndex = chartData.length - 1;
-                          const yearStartIndex = currentIndex - (yearsAgo * 12);
-                          const yearEndIndex = yearStartIndex + 11;
+                        {[3, 2, 1, 0].map(yearsAgo => {
+                          const year = new Date().getFullYear() - yearsAgo;
                           
-                          if (yearStartIndex >= 0) {
-                            const startData = chartData[yearStartIndex];
-                            const endData = chartData[Math.min(yearEndIndex, currentIndex)];
+                          // Find data points for this calendar year
+                          // Filter data for this calendar year and ensure we have valid rates
+                          const yearData = chartData.filter(data => {
+                            const dataYear = parseInt(data.date.split('-')[1]);
+                            return dataYear === year && !isNaN(data.rate);
+                          });
+                          
+                          if (yearData.length > 0) {
+                            const startData = yearData[0];
+                            const endData = yearData[yearData.length - 1];
                             
                             if (startData && endData && startData.nominal && endData.nominal) {
-                              // Calculate year's inflation by comparing the purchasing power at start vs end
-                              const yearInflation = ((endData.nominal / endData.adjusted) - (startData.nominal / startData.adjusted)) * 100;
-                              const salaryIncrease = ((endData.nominal / startData.nominal) - 1) * 100;
+                              // Calculate average inflation for the year
+                              const yearInflation = yearData.reduce((sum, data) => sum + data.rate, 0) / yearData.length;
+                              // Calculate salary change percentage for the year
+                              const firstSalaryOfYear = startData.nominal;
+                              const lastSalaryOfYear = endData.nominal;
+                              const salaryIncrease = ((lastSalaryOfYear / firstSalaryOfYear) - 1) * 100;
                               const beatInflation = salaryIncrease > yearInflation;
                               const year = new Date().getFullYear() - yearsAgo;
                               
