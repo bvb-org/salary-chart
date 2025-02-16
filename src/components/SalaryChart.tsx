@@ -235,7 +235,7 @@ const SalaryChart = () => {
                     <div className="flex-1 min-w-[200px]">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         💵 Salariul Net:
-                        <span className="text-gray-500 text-xs ml-1">(banii primiți în mână, fără bonusuri)</span>
+                        <span className="text-gray-500 text-xs ml-1">(banii primiți în mână, cu sau fără bonusuri; fii consistent)</span>
                       </label>
                       <div className="relative">
                         <input
@@ -321,18 +321,18 @@ const SalaryChart = () => {
               {chartData.length > 0 && (
                 <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
                   <div className="border-b border-gray-200 pb-3">
-                    <h3 className="text-base font-semibold text-gray-800 mb-2">🛒 Exemplu Practic</h3>
+                    <h3 className="text-base font-semibold text-gray-800 mb-2">⚖️ Puterea de Cumpărare: Atunci vs. Acum</h3>
                     <p className="text-sm text-gray-600">
-                      Să zicem că mergi la cumpărături. Iată cum s-au schimbat prețurile:
+                      🔍 <span className="font-medium">Comparație:</span> Ce puteai cumpăra cu primul tău salariu vs. astăzi
                     </p>
-                    <ul className="mt-2 space-y-1 text-sm">
-                      <li className="flex items-center text-gray-700">
-                        <span className="w-48">🛍️ Coș cumpărături în {chartData[0].date}:</span>
-                        <span className="font-medium">{chartData[0].nominal.toLocaleString()} RON</span>
+                    <ul className="mt-3 space-y-2 text-sm">
+                      <li className="flex items-center text-gray-700 bg-blue-50 p-2 rounded-md">
+                        <span className="w-48">🛍️ Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
+                        <span className="font-medium text-blue-700">{chartData[0].nominal.toLocaleString()} RON</span>
                       </li>
-                      <li className="flex items-center text-gray-700">
+                      <li className="flex items-center text-gray-700 bg-amber-50 p-2 rounded-md">
                         <span className="w-48">💸 Același coș astăzi:</span>
-                        <span className="font-medium">{targetValues.initialBasketToday.toLocaleString()} RON</span>
+                        <span className="font-medium text-amber-700">{targetValues.initialBasketToday.toLocaleString()} RON</span>
                       </li>
                     </ul>
                   </div>
@@ -358,8 +358,9 @@ const SalaryChart = () => {
                       </span>
                     </p>
                     <p className="text-sm text-red-600 mt-1">
-                      Din salariul tău de {targetValues.nominal.toLocaleString()} RON,{' '}
-                      poți cumpăra bunuri în valoare de doar {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON
+                      💡 <span className="font-bold">Raportat la primul tău salariu:</span><br />
+                      Din actualul salariu de {targetValues.nominal.toLocaleString()} RON,{' '}
+                      poți cumpăra bunuri în valoare de <span className="font-medium">doar {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON</span> 📉
                     </p>
                   </div>
                   <div>
@@ -487,14 +488,14 @@ const SalaryChart = () => {
                           if (name === 'purchasingPowerLoss') {
                             return [`${value}%`, 'Pierdere Putere de Cumpărare'];
                           }
-                          if (name === 'Salariu') {
+                          if (name === 'Salariul Tău') {
                             return [`${value.toLocaleString()} RON`, '💰 Salariul Tău'];
                           }
-                          if (name === 'Salariu - inflatie') {
-                            return [`${value.toLocaleString()} RON`, '📉 Valoarea Reală'];
+                          if (name === `Salariu - inflatia incepand din ${chartData[0].date}`) {
+                            return [`${value.toLocaleString()} RON`, `📉 Valoarea Reală (ajustată cu inflația din ${chartData[0].date})`];
                           }
-                          if (name === 'Salariu plus inflatia de dupa marire') {
-                            return [`${value.toLocaleString()} RON`, '🎯 Țintă pentru Menținerea Valorii'];
+                          if (name === 'Salariu necesar pentru menținerea puterii de cumpărare') {
+                            return [`${value.toLocaleString()} RON`, '🎯 Salariul necesar pentru a-ți menține puterea de cumpărare'];
                           }
                           return [`${value.toLocaleString()} RON`, name];
                         }}
@@ -523,7 +524,7 @@ const SalaryChart = () => {
                         type="stepAfter"
                         dataKey="nominal"
                         stroke="#4f46e5"
-                        name="Salariu"
+                        name="Salariul Tău"
                         strokeWidth={3}
                         dot={{ fill: '#4f46e5', r: 1 }}
                         activeDot={{ r: 6, strokeWidth: 0 }}
@@ -532,7 +533,7 @@ const SalaryChart = () => {
                         type="monotone"
                         dataKey="adjusted"
                         stroke="#059669"
-                        name="Salariu - inflatie"
+                        name={`Salariu - inflatia incepand din ${chartData[0].date}`}
                         strokeWidth={2}
                         dot={{ fill: '#059669', r: 1 }}
                         activeDot={{ r: 6, strokeWidth: 0 }}
@@ -541,7 +542,7 @@ const SalaryChart = () => {
                         type="monotone"
                         dataKey="maintainPowerTarget"
                         stroke="#d97706"
-                        name="Salariu plus inflatia de dupa marire"
+                        name="Salariu necesar pentru menținerea puterii de cumpărare"
                         strokeWidth={2}
                         strokeDasharray="5 5"
                         dot={{ fill: '#d97706', r: 1 }}
