@@ -36,6 +36,31 @@ const SalaryChart = () => {
   const [inflationData, setInflationData] = useState<InflationData[]>([]);
   
   // Fetch and parse CSV data
+  // Parse URL parameters on load
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const entries = Array.from(params.entries());
+    
+    // Group date and salary params
+    const salaryData: SalaryChange[] = [];
+    for (let i = 0; entries.some(([key]) => key === `date${i}`); i++) {
+      const date = params.get(`date${i}`);
+      const salary = params.get(`salary${i}`);
+      if (date && salary) {
+        salaryData.push({
+          date,
+          salary: parseInt(salary, 10)
+        });
+      }
+    }
+    
+    // If we have salary data in URL, set it
+    if (salaryData.length > 0) {
+      setSalaryChanges(salaryData);
+    }
+  }, []);
+
+  // Load inflation data
   useEffect(() => {
     fetch('/hicp-ro.csv')
       .then(response => response.text())
@@ -311,13 +336,31 @@ const SalaryChart = () => {
                 </div>
               </div>
 
-              <button
-                onClick={calculateChart}
-                className="w-full bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={salaryChanges.length === 0}
-              >
-                🔍 Analizează Salariul
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={calculateChart}
+                  className="flex-1 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={salaryChanges.length === 0}
+                >
+                  🔍 Analizează Salariul
+                </button>
+                <button
+                  onClick={() => {
+                    const params = new URLSearchParams();
+                    salaryChanges.forEach((change, index) => {
+                      params.append(`date${index}`, change.date);
+                      params.append(`salary${index}`, change.salary.toString());
+                    });
+                    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+                    navigator.clipboard.writeText(url);
+                    alert('Link-ul a fost copiat în clipboard! Îl poți distribui pentru a împărtăși datele tale salariale.');
+                  }}
+                  className="flex-1 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={salaryChanges.length === 0}
+                >
+                  💾 Salvează Istoricul Salariilor
+                </button>
+              </div>
 
               {chartData.length > 0 && (
                 <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
