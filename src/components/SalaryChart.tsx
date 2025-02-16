@@ -440,10 +440,11 @@ const SalaryChart = () => {
                       Suma totală câștigată prin salarii de la prima până la ultima lună:
                     </p>
                     <p className="text-2xl font-bold text-blue-600 mt-2">
-                      {targetValues.lifetimeEarnings.toLocaleString()} RON
+                      {targetValues.lifetimeEarnings.toLocaleString()} RON ({Math.round(targetValues.lifetimeEarnings / 5).toLocaleString()} EUR)
                     </p>
                     <p className="text-xs text-gray-500 mt-1 italic">
                       * Această sumă include doar salariile introduse aici, fără bonuri de masă, bonusuri sau alte beneficii.
+                      <br />* Valoarea în EUR este o aproximare folosind un curs de schimb de 5 RON = 1 EUR.
                     </p>
                   </div>
                   <div className="border-b border-gray-200 pb-3">
