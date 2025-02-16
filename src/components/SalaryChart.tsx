@@ -233,7 +233,7 @@ const SalaryChart = () => {
                     <div className="flex-1 min-w-[200px]">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         💵 Salariul Net:
-                        <span className="text-gray-500 text-xs ml-1">(banii primiți în mână)</span>
+                        <span className="text-gray-500 text-xs ml-1">(banii primiți în mână, fără bonusuri)</span>
                       </label>
                       <div className="relative">
                         <input
@@ -347,7 +347,7 @@ const SalaryChart = () => {
                 <h3 className="text-lg font-semibold text-red-700 mb-2">
                   ⚠️ Impactul Inflației
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <p className="text-red-600">
                       📉 Pierdere Putere de Cumpărare:{' '}
@@ -361,15 +361,51 @@ const SalaryChart = () => {
                     </p>
                   </div>
                   <div>
-                    <p className="text-red-600">
-                      📈 Pentru a-ți menține puterea de cumpărare:{' '}
-                      <span className="font-bold">
-                        +{(targetValues.maintainPowerTarget - targetValues.nominal).toLocaleString()} RON
-                      </span>
+                    <p className="text-gray-700 font-medium mb-2">
+                      Ai bătut inflația în ultimii 3 ani?
                     </p>
-                    <p className="text-sm text-red-600 mt-1">
-                      Salariu necesar: {targetValues.maintainPowerTarget.toLocaleString()} RON
-                    </p>
+                    {chartData.length > 24 && (
+                      <div className="space-y-2">
+                        {[2, 1, 0].map(yearsAgo => {
+                          const currentIndex = chartData.length - 1;
+                          const yearStartIndex = currentIndex - (yearsAgo * 12);
+                          const yearEndIndex = yearStartIndex + 11;
+                          
+                          if (yearStartIndex >= 0) {
+                            const startData = chartData[yearStartIndex];
+                            const endData = chartData[Math.min(yearEndIndex, currentIndex)];
+                            
+                            if (startData && endData && startData.nominal && endData.nominal) {
+                              // Calculate year's inflation by comparing the purchasing power at start vs end
+                              const yearInflation = ((endData.nominal / endData.adjusted) - (startData.nominal / startData.adjusted)) * 100;
+                              const salaryIncrease = ((endData.nominal / startData.nominal) - 1) * 100;
+                              const beatInflation = salaryIncrease > yearInflation;
+                              const year = new Date().getFullYear() - yearsAgo;
+                              
+                              return (
+                                <div key={year} className="flex items-center gap-2">
+                                  <span className="text-xl">
+                                    {beatInflation ? '✅' : '❌'}
+                                  </span>
+                                  <span className="font-medium">
+                                    {year}:{' '}
+                                    <span className={`font-medium ${beatInflation ? 'text-green-600' : 'text-red-600'}`}>
+                                      {salaryIncrease > 0 ? '+' : ''}{salaryIncrease.toFixed(1)}% vs. inflație {yearInflation.toFixed(1)}%
+                                    </span>
+                                  </span>
+                                </div>
+                              );
+                            }
+                          }
+                          return null;
+                        })}
+                      </div>
+                    )}
+                    {chartData.length <= 24 && (
+                      <p className="text-sm text-gray-500 italic">
+                        Adaugă date pentru cel puțin 3 ani pentru a vedea analiza completă
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
