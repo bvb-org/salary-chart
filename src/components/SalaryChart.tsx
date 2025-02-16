@@ -143,8 +143,8 @@ const SalaryChart = () => {
         const inflationAdjustedSalary = currentNominal / cumulativeInflation;
         const maintainPowerTarget = initialSalary * cumulativeInflation;
 
-        // Format date for display (YYYY-MM)
-        const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+        // Format date for display (MM-YYYY)
+        const formattedDate = `${String(currentDate.getMonth() + 1).padStart(2, '0')}-${currentDate.getFullYear()}`;
 
         const purchasingPowerLoss = ((currentNominal - inflationAdjustedSalary) / currentNominal) * 100;
         
@@ -255,7 +255,7 @@ const SalaryChart = () => {
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <span className="text-sm font-medium text-gray-700">
-                                {change.date.substring(0, 7)}
+                                {`${change.date.substring(5, 7)}-${change.date.substring(0, 4)}`}
                               </span>
                               <span className="text-sm text-gray-900 font-semibold">
                                 {change.salary.toLocaleString()} RON
@@ -414,7 +414,7 @@ const SalaryChart = () => {
                         }
                         return [`${value.toLocaleString()} RON`, name];
                       }}
-                      labelFormatter={(label) => `Luna: ${label.substring(0, 7)}`}
+                      labelFormatter={(label) => `Luna: ${label.substring(3, 5)}-${label.substring(0, 4)}`}
                       contentStyle={{
                         backgroundColor: 'white',
                         border: '1px solid #e5e7eb',
