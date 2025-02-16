@@ -101,6 +101,18 @@ const SalaryChart = () => {
         window.location.href = 'https://www.youtube.com/watch?v=xvFZjo5PgG0';
         return;
       }
+
+      // Check if date is in the future
+      const inputDate = new Date(newDate);
+      const currentDate = new Date();
+      // Set both dates to the first of the month for accurate month comparison
+      inputDate.setDate(1);
+      currentDate.setDate(1);
+      
+      if (inputDate > currentDate) {
+        alert('Nu poți introduce date din viitor. Te rog alege o dată din prezent sau trecut.');
+        return;
+      }
       setSalaryChanges([...salaryChanges, {
         date: newDate,
         salary: salaryValue
@@ -246,8 +258,13 @@ const SalaryChart = () => {
             <div className="space-y-6">
               <div className="space-y-4">
                 <p className="text-sm text-gray-600">
-                  🎯 Introdu istoricul salariului tău pentru a vedea situația reală. Începe cu primul salariu și adaugă fiecare modificare pe parcurs.
+                  🎯 Introdu istoricul salariului tău. Începe cu primul salariu și adaugă fiecare modificare pe parcurs.
                 </p>
+                <div className="bg-blue-50 p-3 rounded-md">
+                  <p className="text-sm text-blue-700">
+                    🔒 Datele tale sunt în siguranță! Toate calculele se fac direct în browser-ul tău, iar noi nu colectăm, nu stocăm și nu transmitem niciun fel de date personale. Poți verifica asta în codul sursă al aplicației.
+                  </p>
+                </div>
                 <form onSubmit={addSalaryChange} className="space-y-4">
                   <div className="flex gap-4 flex-wrap">
                     <div className="flex-1 min-w-[200px]">
@@ -259,6 +276,8 @@ const SalaryChart = () => {
                         type="month"
                         value={newDate}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setNewDate(e.target.value)}
+                        min="1996-01"
+                        max={new Date().toISOString().slice(0, 7)}
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         required
                       />
@@ -400,7 +419,7 @@ const SalaryChart = () => {
                   className="flex-1 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={salaryChanges.length === 0}
                 >
-                  💾 Salvează Istoricul Salariilor
+                  🔗 Creează Link pentru Istoric
                 </button>
               </div>
 
