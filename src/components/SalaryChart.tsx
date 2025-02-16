@@ -17,12 +17,6 @@ interface ChartDataPoint {
   rate: number;
 }
 
-interface TargetValues {
-  maintainPowerTarget: number;
-  nominal: number;
-  initialBasketToday: number;
-}
-
 interface InflationData {
   date: string;
   rate: number;
@@ -90,8 +84,16 @@ const SalaryChart = () => {
   const [targetValues, setTargetValues] = useState<TargetValues>({
     maintainPowerTarget: 0,
     nominal: 0,
-    initialBasketToday: 0
+    initialBasketToday: 0,
+    lifetimeEarnings: 0
   });
+
+  interface TargetValues {
+    maintainPowerTarget: number;
+    nominal: number;
+    initialBasketToday: number;
+    lifetimeEarnings: number;
+  }
 
   const addSalaryChange = (e: FormEvent) => {
     e.preventDefault();
@@ -229,10 +231,17 @@ const SalaryChart = () => {
       const initialSalary = sortedChanges[0].salary;
       const initialBasketToday = Math.round(initialSalary * cumulativeInflation);
       
+      // Calculate lifetime earnings by summing up monthly salaries
+      let lifetimeEarnings = 0;
+      for (let i = 0; i < data.length; i++) {
+        lifetimeEarnings += data[i].nominal;
+      }
+      
       setTargetValues({
         maintainPowerTarget: finalData.maintainPowerTarget,
         nominal: finalData.nominal,
-        initialBasketToday
+        initialBasketToday,
+        lifetimeEarnings
       });
     } else {
       alert('Nu s-au găsit date valide pentru perioada selectată');
@@ -425,6 +434,18 @@ const SalaryChart = () => {
 
               {chartData.length > 0 && (
                 <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+                  <div className="border-b border-gray-200 pb-3">
+                    <h3 className="text-base font-semibold text-gray-800 mb-2">💰 Câștiguri Totale din Muncă</h3>
+                    <p className="text-sm text-gray-600">
+                      Suma totală câștigată prin salarii de la prima până la ultima lună:
+                    </p>
+                    <p className="text-2xl font-bold text-blue-600 mt-2">
+                      {targetValues.lifetimeEarnings.toLocaleString()} RON
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1 italic">
+                      * Această sumă include doar salariile introduse aici, fără bonuri de masă, bonusuri sau alte beneficii.
+                    </p>
+                  </div>
                   <div className="border-b border-gray-200 pb-3">
                     <h3 className="text-base font-semibold text-gray-800 mb-2">⚖️ Puterea de Cumpărare: Atunci vs. Acum</h3>
                     <p className="text-sm text-gray-600">
