@@ -418,14 +418,14 @@ const SalaryChart = () => {
                         if (name === 'purchasingPowerLoss') {
                           return [`${value}%`, 'Pierdere Putere de Cumpărare'];
                         }
-                        if (name === 'Ce Primești') {
-                          return [`${value.toLocaleString()} RON`, 'Salariul Nominal'];
+                        if (name === 'salariu') {
+                          return [`${value.toLocaleString()} RON`, 'salariu'];
                         }
-                        if (name === 'Ce Poți Cumpăra') {
-                          return [`${value.toLocaleString()} RON`, 'Valoarea Reală'];
+                        if (name === 'salariu minus inflatia') {
+                          return [`${value.toLocaleString()} RON`, 'salariu minus inflatia'];
                         }
-                        if (name === 'Ce Ai Avea Nevoie') {
-                          return [`${value.toLocaleString()} RON`, 'Inflatia dupa marire salariu'];
+                        if (name === 'salariu plus inflatia dupa marire') {
+                          return [`${value.toLocaleString()} RON`, 'salariu plus inflatia dupa marire'];
                         }
                         return [`${value.toLocaleString()} RON`, name];
                       }}
@@ -454,7 +454,7 @@ const SalaryChart = () => {
                       type="stepAfter"
                       dataKey="nominal"
                       stroke="#4f46e5"
-                      name="Ce Primești"
+                      name="Salariu"
                       strokeWidth={3}
                       dot={{ fill: '#4f46e5', r: 1 }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
@@ -463,7 +463,7 @@ const SalaryChart = () => {
                       type="monotone"
                       dataKey="adjusted"
                       stroke="#059669"
-                      name="Ce Poți Cumpăra"
+                      name="Salariu - inflatie"
                       strokeWidth={2}
                       dot={{ fill: '#059669', r: 1 }}
                       activeDot={{ r: 6, strokeWidth: 0 }}
@@ -472,7 +472,7 @@ const SalaryChart = () => {
                       type="monotone"
                       dataKey="maintainPowerTarget"
                       stroke="#d97706"
-                      name="Ce Ai Avea Nevoie"
+                      name="Salariu plus inflatia de dupa marire"
                       strokeWidth={2}
                       strokeDasharray="5 5"
                       dot={{ fill: '#d97706', r: 1 }}
