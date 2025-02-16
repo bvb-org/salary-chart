@@ -255,8 +255,8 @@ const SalaryChart = () => {
 
   return (
     <Card className="w-full max-w-[1400px] mx-auto bg-white shadow-lg">
-      <div className="lg:grid lg:grid-cols-2 lg:gap-6">
-        <div className="lg:order-1">
+      <div className="space-y-6">
+        <div>
           <CardHeader className="space-y-6">
             <CardTitle className="text-2xl font-bold text-gray-800">
               💰 Calculatorul Tău de Salariu și Inflație
@@ -433,7 +433,8 @@ const SalaryChart = () => {
               </div>
 
               {chartData.length > 0 && (
-                <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="lg:col-span-2 space-y-4 bg-gray-50 p-4 rounded-lg">
                   <div className="border-b border-gray-200 pb-3">
                     <h3 className="text-base font-semibold text-gray-800 mb-2">💰 Câștiguri Totale din Muncă</h3>
                     <p className="text-sm text-gray-600">
@@ -464,90 +465,84 @@ const SalaryChart = () => {
                     </ul>
                   </div>
                 </div>
+                <div className="lg:col-span-1 p-4 bg-red-50 border border-red-200 rounded-lg h-fit">
+                  <h3 className="text-lg font-semibold text-red-700 mb-2 text-center">
+                    ⚠️ Impactul Inflației
+                  </h3>
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-red-600">
+                        📉 Pierdere Putere de Cumpărare:{' '}
+                        <span className="font-bold text-xl">
+                          {chartData[chartData.length - 1].purchasingPowerLoss.toFixed(1)}%
+                        </span>
+                      </p>
+                      <p className="text-sm text-red-600 mt-1">
+                        💡 <span className="font-bold">Calculand inflația de la primul tău salariu,</span><br />
+                        Astăzi, din {targetValues.nominal.toLocaleString()} RON,{' '}
+                        poți cumpăra bunuri în valoare de doar <span className="font-medium"> {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON</span> 📉
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-700 font-medium mb-2">
+                        <strong>Ai bătut inflația în ultimii 3 ani?</strong>
+                      </p>
+                      {chartData.length > 24 && (
+                        <div className="space-y-2">
+                          {[2, 1, 0].map(yearsAgo => {
+                            const year = new Date().getFullYear() - yearsAgo;
+                            
+                            const yearData = chartData.filter(data => {
+                              const dataYear = parseInt(data.date.split('-')[1]);
+                              return dataYear === year && !isNaN(data.rate);
+                            });
+                            
+                            if (yearData.length > 0) {
+                              const startData = yearData[0];
+                              const endData = yearData[yearData.length - 1];
+                              
+                              if (startData && endData && startData.nominal && endData.nominal) {
+                                const yearInflation = yearData.reduce((sum, data) => sum + data.rate, 0) / yearData.length;
+                                const firstSalaryOfYear = startData.nominal;
+                                const lastSalaryOfYear = endData.nominal;
+                                const salaryIncrease = ((lastSalaryOfYear / firstSalaryOfYear) - 1) * 100;
+                                const beatInflation = salaryIncrease > yearInflation;
+                                
+                                return (
+                                  <div key={year} className="flex items-center gap-2">
+                                    <span className="text-xl">
+                                      {beatInflation ? '✅' : '❌'}
+                                    </span>
+                                    <span className="font-medium">
+                                      {year}:{' '}
+                                      <span className={`font-medium ${beatInflation ? 'text-green-600' : 'text-red-600'}`}>
+                                        {salaryIncrease > 0 ? '+' : ''}{salaryIncrease.toFixed(1)}% vs. inflație {yearInflation.toFixed(1)}%
+                                      </span>
+                                    </span>
+                                  </div>
+                                );
+                              }
+                            }
+                            return null;
+                          })}
+                        </div>
+                      )}
+                      {chartData.length <= 24 && (
+                        <p className="text-sm text-gray-500 italic">
+                          Adaugă date pentru cel puțin 3 ani pentru a vedea analiza completă
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
               )}
             </div>
           </CardHeader>
         </div>
 
-        <div className="lg:order-2">
-          <CardContent className="h-full pt-6">
-            {chartData.length > 0 && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <h3 className="text-lg font-semibold text-red-700 mb-2 text-center">
-                  ⚠️ Impactul Inflației
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <p className="text-red-600">
-                      📉 Pierdere Putere de Cumpărare:{' '}
-                      <span className="font-bold text-xl">
-                        {chartData[chartData.length - 1].purchasingPowerLoss.toFixed(1)}%
-                      </span>
-                    </p>
-                    <p className="text-sm text-red-600 mt-1">
-                      💡 <span className="font-bold">Calculand inflația de la primul tău salariu,</span><br />
-                      Astăzi, din {targetValues.nominal.toLocaleString()} RON,{' '}
-                      poți cumpăra bunuri în valoare de doar <span className="font-medium"> {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON</span> 📉
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-700 font-medium mb-2">
-                      <strong>Ai bătut inflația în ultimii 3 ani?</strong>
-                    </p>
-                    {chartData.length > 24 && (
-                      <div className="space-y-2">
-                        {[2, 1, 0].map(yearsAgo => {
-                          const year = new Date().getFullYear() - yearsAgo;
-                          
-                          // Find data points for this calendar year
-                          // Filter data for this calendar year and ensure we have valid rates
-                          const yearData = chartData.filter(data => {
-                            const dataYear = parseInt(data.date.split('-')[1]);
-                            return dataYear === year && !isNaN(data.rate);
-                          });
-                          
-                          if (yearData.length > 0) {
-                            const startData = yearData[0];
-                            const endData = yearData[yearData.length - 1];
-                            
-                            if (startData && endData && startData.nominal && endData.nominal) {
-                              // Calculate average inflation for the year
-                              const yearInflation = yearData.reduce((sum, data) => sum + data.rate, 0) / yearData.length;
-                              // Calculate salary change percentage for the year
-                              const firstSalaryOfYear = startData.nominal;
-                              const lastSalaryOfYear = endData.nominal;
-                              const salaryIncrease = ((lastSalaryOfYear / firstSalaryOfYear) - 1) * 100;
-                              const beatInflation = salaryIncrease > yearInflation;
-                              const year = new Date().getFullYear() - yearsAgo;
-                              
-                              return (
-                                <div key={year} className="flex items-center gap-2">
-                                  <span className="text-xl">
-                                    {beatInflation ? '✅' : '❌'}
-                                  </span>
-                                  <span className="font-medium">
-                                    {year}:{' '}
-                                    <span className={`font-medium ${beatInflation ? 'text-green-600' : 'text-red-600'}`}>
-                                      {salaryIncrease > 0 ? '+' : ''}{salaryIncrease.toFixed(1)}% vs. inflație {yearInflation.toFixed(1)}%
-                                    </span>
-                                  </span>
-                                </div>
-                              );
-                            }
-                          }
-                          return null;
-                        })}
-                      </div>
-                    )}
-                    {chartData.length <= 24 && (
-                      <p className="text-sm text-gray-500 italic">
-                        Adaugă date pentru cel puțin 3 ani pentru a vedea analiza completă
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+        <div>
+          <CardContent className="pt-6">
             <div className="space-y-6">
               {chartData.length > 0 && (
                 <div className="h-[200px]">
