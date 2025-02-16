@@ -562,10 +562,10 @@ const SalaryChart = () => {
                   </ResponsiveContainer>
                 </div>
               )}
-              <div className="h-[300px] lg:h-[calc(100vh-38rem)] min-h-[300px]" ref={graphRef}>
+              <div className="h-[500px] lg:h-[600px] relative" ref={graphRef}>
                 {chartData.length > 0 ? (
                   <>
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="100%" height="70%">
                       <LineChart
                         data={chartData}
                         margin={{ top: 30, right: 30, left: 20, bottom: 65 }}
