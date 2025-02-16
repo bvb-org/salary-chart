@@ -19,6 +19,7 @@ interface ChartDataPoint {
 interface TargetValues {
   maintainPowerTarget: number;
   nominal: number;
+  initialBasketToday: number;
 }
 
 interface InflationData {
@@ -61,7 +62,8 @@ const SalaryChart = () => {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [targetValues, setTargetValues] = useState<TargetValues>({
     maintainPowerTarget: 0,
-    nominal: 0
+    nominal: 0,
+    initialBasketToday: 0
   });
 
   const addSalaryChange = (e: FormEvent) => {
@@ -178,9 +180,14 @@ const SalaryChart = () => {
     if (data.length > 0) {
       setChartData(data);
       const finalData = data[data.length - 1];
+      // Calculate how much the initial basket (first salary) would cost today
+      const initialSalary = sortedChanges[0].salary;
+      const initialBasketToday = Math.round(initialSalary * cumulativeInflation);
+      
       setTargetValues({
         maintainPowerTarget: finalData.maintainPowerTarget,
-        nominal: finalData.nominal
+        nominal: finalData.nominal,
+        initialBasketToday
       });
     } else {
       alert('Nu s-au găsit date valide pentru perioada selectată');
@@ -323,7 +330,7 @@ const SalaryChart = () => {
                       </li>
                       <li className="flex items-center text-gray-700">
                         <span className="w-32">Același coș azi:</span>
-                        <span className="font-medium">{targetValues.maintainPowerTarget.toLocaleString()} RON</span>
+                        <span className="font-medium">{targetValues.initialBasketToday.toLocaleString()} RON</span>
                       </li>
                     </ul>
                   </div>
