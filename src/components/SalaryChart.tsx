@@ -96,9 +96,14 @@ const SalaryChart = () => {
   const addSalaryChange = (e: FormEvent) => {
     e.preventDefault();
     if (newDate && newSalary) {
-      setSalaryChanges([...salaryChanges, { 
-        date: newDate, 
-        salary: parseInt(newSalary, 10) 
+      const salaryValue = parseInt(newSalary, 10);
+      if (salaryValue < 0) {
+        window.location.href = 'https://www.youtube.com/watch?v=xvFZjo5PgG0';
+        return;
+      }
+      setSalaryChanges([...salaryChanges, {
+        date: newDate,
+        salary: salaryValue
       }].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
       setNewDate('');
       setNewSalary('');
