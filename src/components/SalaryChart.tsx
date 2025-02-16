@@ -491,8 +491,8 @@ const SalaryChart = () => {
                           if (name === 'Salariul Tău') {
                             return [`${value.toLocaleString()} RON`, '💰 Salariul Tău'];
                           }
-                          if (name === `Salariu - inflatia incepand din ${chartData[0].date}`) {
-                            return [`${value.toLocaleString()} RON`, `📉 Valoarea Reală (ajustată cu inflația din ${chartData[0].date})`];
+                          if (name === `Salariul tău ajustat la inflația incepand din ${chartData[0].date}`) {
+                            return [`${value.toLocaleString()} RON`, `📉 Salariul tău ajustat la inflația incepand din ${chartData[0].date}`];
                           }
                           if (name === 'Salariu necesar pentru menținerea puterii de cumpărare') {
                             return [`${value.toLocaleString()} RON`, '🎯 Salariul necesar pentru a-ți menține puterea de cumpărare'];
@@ -533,7 +533,7 @@ const SalaryChart = () => {
                         type="monotone"
                         dataKey="adjusted"
                         stroke="#059669"
-                        name={`Salariu - inflatia incepand din ${chartData[0].date}`}
+                        name={`Salariul tău ajustat la inflația incepand din ${chartData[0].date}`}
                         strokeWidth={2}
                         dot={{ fill: '#059669', r: 1 }}
                         activeDot={{ r: 6, strokeWidth: 0 }}
