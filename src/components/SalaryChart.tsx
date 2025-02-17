@@ -259,10 +259,10 @@ const SalaryChart = () => {
         <div>
           <CardHeader className="space-y-6">
             <CardTitle className="text-2xl font-bold text-gray-800">
-              💰 Calculatorul Tău de Salariu și Inflație
+              💰 Calculatorul de Salariu și Inflație
             </CardTitle>
             <p className="text-gray-600 mt-2">
-              Hai să vedem cum îți merge salariul! 📊 Vom analiza împreună cum inflația îți afectează banii, chiar și atunci când primești măriri.
+              📊 Salut! Vom analiza împreună cum inflația îți afectează banii, chiar și atunci când primești măriri.
             </p>
             <div className="space-y-6">
               <div className="space-y-4">
@@ -279,7 +279,7 @@ const SalaryChart = () => {
                     <div className="flex-1 min-w-[200px]">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         📅 Luna și Anul:
-                        <span className="text-gray-500 text-xs ml-1">(când ai primit primul salariu sau o mărire)</span>
+                        <span className="text-gray-500 text-xs ml-1">(adaugă toate salariile și măririle salariale)</span>
                       </label>
                       <input
                         type="month"
@@ -320,7 +320,7 @@ const SalaryChart = () => {
               </div>
 
               <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
-                <h3 className="text-sm font-medium text-gray-700">📝 Istoricul Salariului:</h3>
+                <h3 className="text-sm font-medium text-gray-700">📝 Istoricul Salariilor:</h3>
                 <div className="space-y-2">
                   {salaryChanges.length === 0 ? (
                     <p className="text-sm text-gray-500 italic">
@@ -485,11 +485,11 @@ const SalaryChart = () => {
                     </div>
                     <div>
                       <p className="text-gray-700 font-medium mb-2">
-                        <strong>Ai bătut inflația în ultimii 3 ani?</strong>
+                        <strong>Ai bătut inflația în ultimii ani?</strong>
                       </p>
                       {chartData.length > 24 && (
                         <div className="space-y-2">
-                          {[2, 1, 0].map(yearsAgo => {
+                          {[3, 2, 1, 0].map(yearsAgo => {
                             const year = new Date().getFullYear() - yearsAgo;
                             
                             const yearData = chartData.filter(data => {
