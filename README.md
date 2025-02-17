@@ -13,11 +13,9 @@ A Next.js application that visualizes salary data and HICP (Harmonised Index of 
 
 ## Demo
 
-### Video Tutorial
+### Video Tutorial (TODO)
 
 [![Watch the video](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://youtu.be/VIDEO_ID)
-
-*Replace VIDEO_ID with your actual YouTube video ID*
 
 ## Setup with Docker
 
