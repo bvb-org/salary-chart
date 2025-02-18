@@ -193,10 +193,12 @@ const SalaryChart = () => {
     const startDate = new Date(startYear, startMonth - 1, 1);
 
     // Get the latest date between last salary change and last inflation data
-    const lastSalaryDate = new Date(sortedChanges[sortedChanges.length - 1].date);
-    const lastInflationDate = new Date(inflationData[inflationData.length - 1].date);
+    const [lastSalaryYear, lastSalaryMonth] = sortedChanges[sortedChanges.length - 1].date.split('-').map(Number);
+    const [lastInflationYear, lastInflationMonth] = inflationData[inflationData.length - 1].date.split('-').map(Number);
+    
+    const lastSalaryDate = new Date(lastSalaryYear, lastSalaryMonth - 1, 1);
+    const lastInflationDate = new Date(lastInflationYear, lastInflationMonth - 1, 1);
     const endDate = new Date(Math.max(lastSalaryDate.getTime(), lastInflationDate.getTime()));
-    endDate.setDate(1); // Set to first of the month for consistency
 
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
       console.error('Invalid date parsing:', {
