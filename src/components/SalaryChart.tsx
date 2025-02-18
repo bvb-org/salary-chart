@@ -97,6 +97,8 @@ const SalaryChart = () => {
 
   const addSalaryChange = (e: FormEvent) => {
     e.preventDefault();
+    console.log('Adding salary change:', { newDate, newSalary });
+    
     if (newDate && newSalary) {
       const salaryValue = parseInt(newSalary, 10);
       if (salaryValue < 0) {
@@ -104,12 +106,28 @@ const SalaryChart = () => {
         return;
       }
 
+      // Ensure date is properly formatted (YYYY-MM)
+      const datePattern = /^\d{4}-\d{2}$/;
+      if (!datePattern.test(newDate)) {
+        console.error('Invalid date format:', newDate);
+        alert('Format dată invalid. Te rog folosește formatul AAAA-LL');
+        return;
+      }
+
       // Check if date is in the future
-      const inputDate = new Date(newDate);
+      const [year, month] = newDate.split('-').map(Number);
+      const inputDate = new Date(year, month - 1);
       const currentDate = new Date();
+      
       // Set both dates to the first of the month for accurate month comparison
       inputDate.setDate(1);
       currentDate.setDate(1);
+      
+      console.log('Date validation:', {
+        inputDate: inputDate.toISOString(),
+        currentDate: currentDate.toISOString(),
+        isFuture: inputDate > currentDate
+      });
       
       if (inputDate > currentDate) {
         alert('Nu poți introduce date din viitor. Te rog alege o dată din prezent sau trecut.');
@@ -129,6 +147,11 @@ const SalaryChart = () => {
   };
 
   const calculateChart = () => {
+    console.log('Starting chart calculation', {
+      salaryChangesCount: salaryChanges.length,
+      inflationDataCount: inflationData.length
+    });
+
     if (salaryChanges.length === 0) {
       alert('Te rog adaugă cel puțin o intrare salarială');
       return;
@@ -141,16 +164,52 @@ const SalaryChart = () => {
 
     const data: ChartDataPoint[] = [];
     let cumulativeInflation = 1;
-    const sortedChanges = [...salaryChanges].sort((a, b) =>
-      new Date(a.date).getTime() - new Date(b.date).getTime()
-    );
+    
+    // Sort and validate dates
+    const sortedChanges = [...salaryChanges].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      console.log('Sorting dates:', {
+        dateA: dateA.toISOString(),
+        dateB: dateB.toISOString(),
+        isValidA: !isNaN(dateA.getTime()),
+        isValidB: !isNaN(dateB.getTime())
+      });
+      return dateA.getTime() - dateB.getTime();
+    });
 
     // Track inflation since last salary change
     let lastChangeCumulativeInflation = 1;
 
     // Get start date from first salary entry and end date from last inflation data point
-    const startDate = new Date(sortedChanges[0].date);
-    const endDate = new Date(inflationData[inflationData.length - 1].date);
+    console.log('Parsing dates for chart calculation:', {
+      firstSalaryDate: sortedChanges[0].date,
+      lastInflationDate: inflationData[inflationData.length - 1].date,
+      browser: navigator.userAgent
+    });
+
+    // Ensure proper date parsing for Safari
+    const [startYear, startMonth] = sortedChanges[0].date.split('-').map(Number);
+    const startDate = new Date(startYear, startMonth - 1, 1);
+
+    const [endYear, endMonth] = inflationData[inflationData.length - 1].date.split('-').map(Number);
+    const endDate = new Date(endYear, endMonth - 1, 1);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      console.error('Invalid date parsing:', {
+        startDate: startDate.toString(),
+        endDate: endDate.toString(),
+        startValid: !isNaN(startDate.getTime()),
+        endValid: !isNaN(endDate.getTime())
+      });
+      alert('Eroare la procesarea datelor. Te rog încearcă din nou.');
+      return;
+    }
+
+    console.log('Parsed dates:', {
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString()
+    });
 
     // Function to get current nominal salary for a date
     const getNominalSalary = (currentDate: Date) => {
@@ -162,14 +221,29 @@ const SalaryChart = () => {
 
     // Function to get inflation rate for a specific month
     const getInflationRate = (date: Date) => {
+      if (isNaN(date.getTime())) {
+        console.error('Invalid date passed to getInflationRate:', date);
+        return null;
+      }
+
       // Format the search date as YYYY-MM
       const searchYearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
       
+      console.log('Searching for inflation rate:', {
+        inputDate: date.toISOString(),
+        searchYearMonth,
+        availableMonths: inflationData.slice(0, 3).map(d => d.date) // Log first 3 months for debugging
+      });
+
       // Find the matching data by comparing year and month only
       const monthData = inflationData.find(d => {
         const dataYearMonth = d.date.substring(0, 7); // Get YYYY-MM part
         return dataYearMonth === searchYearMonth;
       });
+
+      if (!monthData) {
+        console.warn('No inflation data found for:', searchYearMonth);
+      }
       
       return monthData ? monthData.rate : null;
     };
@@ -284,12 +358,32 @@ const SalaryChart = () => {
                       <input
                         type="month"
                         value={newDate}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setNewDate(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                          console.log('Date input change:', {
+                            rawValue: e.target.value,
+                            inputType: e.target.type,
+                            isSafari: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+                          });
+                          
+                          // Ensure the date is in YYYY-MM format
+                          const value = e.target.value;
+                          if (value && !/^\d{4}-\d{2}$/.test(value)) {
+                            console.warn('Invalid date format:', value);
+                            return;
+                          }
+                          
+                          setNewDate(value);
+                        }}
+                        pattern="\d{4}-\d{2}"
+                        placeholder="YYYY-MM"
                         min="1996-01"
                         max={new Date().toISOString().slice(0, 7)}
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         required
                       />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Format: AAAA-LL (ex: 2024-02)
+                      </p>
                     </div>
                     <div className="flex-1 min-w-[200px]">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
