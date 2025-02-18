@@ -381,9 +381,6 @@ const SalaryChart = () => {
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         required
                       />
-                      <p className="text-xs text-gray-500 mt-1">
-                        Format: AAAA-LL (ex: 2024-02)
-                      </p>
                     </div>
                     <div className="flex-1 min-w-[200px]">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -550,7 +547,7 @@ const SalaryChart = () => {
                     <ul className="mt-3 space-y-2 text-sm">
                       <li className="flex items-center text-gray-700 bg-blue-50 p-2 rounded-md">
                         <span className="w-48">🛍️ Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
-                        <span className="font-medium text-blue-700">{chartData[0].nominal.toLocaleString()} RON</span>
+                        <span className="font-medium text-blue-700">{salaryChanges[0].salary.toLocaleString()} RON</span>
                       </li>
                       <li className="flex items-center text-gray-700 bg-amber-50 p-2 rounded-md">
                         <span className="w-48">💸 Același coș astăzi:</span>
