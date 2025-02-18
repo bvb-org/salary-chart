@@ -593,22 +593,6 @@ const SalaryChart = () => {
                       );
                     })()}
                   </div>
-                  <div className="border-b border-gray-200 pb-3">
-                    <h3 className="text-base font-semibold text-gray-800 mb-2">⚖️ Puterea de Cumpărare: Atunci vs. Acum</h3>
-                    <p className="text-sm text-gray-600">
-                      🔍 <span className="font-medium">Comparație:</span> Ce puteai cumpăra cu primul tău salariu vs. astăzi
-                    </p>
-                    <ul className="mt-3 space-y-2 text-sm">
-                      <li className="flex items-center text-gray-700 bg-blue-50 p-2 rounded-md">
-                        <span className="w-48">🛍️ Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
-                        <span className="font-medium text-blue-700">{salaryChanges[0].salary.toLocaleString()} RON</span>
-                      </li>
-                      <li className="flex items-center text-gray-700 bg-amber-50 p-2 rounded-md">
-                        <span className="w-48">💸 Același coș astăzi:</span>
-                        <span className="font-medium text-amber-700">{targetValues.initialBasketToday.toLocaleString()} RON</span>
-                      </li>
-                    </ul>
-                  </div>
                 </div>
                 <div className="lg:col-span-1 p-4 bg-red-50 border border-red-200 rounded-lg h-fit">
                   <h3 className="text-lg font-semibold text-red-700 mb-2 text-center">
@@ -678,6 +662,22 @@ const SalaryChart = () => {
                         </p>
                       )}
                     </div>
+                  </div>
+                  <div className="border-b border-gray-200 pb-3">
+                    <h3 className="text-base font-semibold text-gray-800 mb-2">⚖️ Puterea de Cumpărare: Atunci vs. Acum</h3>
+                    <p className="text-sm text-gray-600">
+                      🔍 <span className="font-medium">Comparație:</span> Ce puteai cumpăra cu primul tău salariu vs. astăzi
+                    </p>
+                    <ul className="mt-3 space-y-2 text-sm">
+                      <li className="flex items-center text-gray-700 bg-blue-50 p-2 rounded-md">
+                        <span className="w-48">🛍️ Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
+                        <span className="font-medium text-blue-700">{salaryChanges[0].salary.toLocaleString()} RON</span>
+                      </li>
+                      <li className="flex items-center text-gray-700 bg-amber-50 p-2 rounded-md">
+                        <span className="w-48">💸 Același coș astăzi:</span>
+                        <span className="font-medium text-amber-700">{targetValues.initialBasketToday.toLocaleString()} RON</span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
