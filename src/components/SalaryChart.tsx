@@ -580,8 +580,8 @@ const SalaryChart = () => {
                           const [currentMonth, currentYear] = data.date.split('-').map(Number);
                           
                           if (currentYear >= 2025) {
-                            // 2025+: 45% of net
-                            govContribution = data.nominal * 0.45;
+                            // 2025+: 41.5% of net
+                            govContribution = data.nominal * 0.415;
                           } else if (currentYear === 2023 && currentMonth >= 11 || currentYear === 2024) {
                             // Nov 2023-Dec 2024: Split bracket
                             // First calculate what gross salary would be at 35% rate
@@ -591,21 +591,21 @@ const SalaryChart = () => {
                               govContribution = data.nominal * 0.35;
                             } else {
                               // For amounts over 10000 gross:
-                              // First 10000 at 35%, rest at 45%
+                              // First 10000 at 35%, rest at 41.5%
                               const netFor10000 = 10000 / 1.35; // Net salary for 10000 gross at 35%
                               const remainingNet = data.nominal - netFor10000;
-                              govContribution = (netFor10000 * 0.35) + (remainingNet * 0.45);
+                              govContribution = (netFor10000 * 0.35) + (remainingNet * 0.415);
                             }
                           } else if (currentYear >= 2004) {
                             // 2004-Oct 2023: 35% of net
                             govContribution = data.nominal * 0.35;
                           } else {
-                            // 1996-2003: 45% of net
-                            govContribution = data.nominal * 0.45;
+                            // 1996-2003: 41.5% of net
+                            govContribution = data.nominal * 0.415;
                           }
                         } else {
-                          // Flat 45% tax rate when tax exempt is unchecked
-                          govContribution = data.nominal * 0.45;
+                          // Flat 41.5% tax rate when tax exempt is unchecked
+                          govContribution = data.nominal * 0.415;
                         }
                         
                         totalGovContribution += govContribution;
@@ -634,7 +634,7 @@ const SalaryChart = () => {
                                 
                                 if (taxExempt) {
                                   if (year >= 2025) {
-                                    taxPercentage = 0.45;
+                                    taxPercentage = 0.415;
                                   } else if (year === 2023 && month >= 11 || year === 2024) {
                                     // For Nov 2023-Oct 2024 period with split bracket
                                     const baseGross = data.nominal * 1.35;
@@ -644,16 +644,16 @@ const SalaryChart = () => {
                                       // Calculate weighted average for split bracket
                                       const netFor10000 = 10000 / 1.35;
                                       const remainingNet = data.nominal - netFor10000;
-                                      taxPercentage = ((netFor10000 * 0.35) + (remainingNet * 0.45)) / data.nominal;
+                                      taxPercentage = ((netFor10000 * 0.35) + (remainingNet * 0.415)) / data.nominal;
                                     }
                                   } else if (year >= 2004) {
                                     taxPercentage = 0.35;
                                   } else {
-                                    taxPercentage = 0.45;
+                                    taxPercentage = 0.415;
                                   }
                                 } else {
-                                  // Flat 45% when tax exempt is unchecked
-                                  taxPercentage = 0.45;
+                                  // Flat 41.5% when tax exempt is unchecked
+                                  taxPercentage = 0.415;
                                 }
                                 
                                 stateMonths += taxPercentage;
@@ -666,13 +666,13 @@ const SalaryChart = () => {
                             })()}
                           </p>
                           <p className="text-xs text-gray-500 italic">
-                            * Calculat folosind {taxExempt ? 'următoarele procente' : 'un procent constant de 45%'} pentru salariul brut:
+                            * Calculat folosind {taxExempt ? 'următoarele procente' : 'un procent constant de 41.5%'} pentru salariul brut:
                             {taxExempt ? (
                               <React.Fragment>
-                                <br />• 1996 - 2003: 45% din salariul net
+                                <br />• 1996 - 2003: 41.5% din salariul net
                                 <br />• 2004 - Oct.2023: 35% din salariul net
-                                <br />• Noi.2023 - Oct.2024: 35% din primii 10.000 RON brut, 45% din 10.000 RON+
-                                <br />• 2025+: 45% din salariul net
+                                <br />• Noi.2023 - Oct.2024: 35% din primii 10.000 RON brut, 41.5% din 10.000 RON+
+                                <br />• 2025+: 41.5% din salariul net
                               </React.Fragment>
                             ) : (
                               <> </>
