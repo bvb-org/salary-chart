@@ -547,6 +547,53 @@ const SalaryChart = () => {
                     </p>
                   </div>
                   <div className="border-b border-gray-200 pb-3">
+                    <h3 className="text-base font-semibold text-gray-800 mb-2">💸 Cât ai muncit pentru stat?</h3>
+                    <p className="text-sm text-gray-600">
+                      Contribuția ta la stat, calculată ca diferența între salariul brut și cel net:
+                    </p>
+                    {(() => {
+                      let totalGovContribution = 0;
+                      let totalMonths = 0;
+                      
+                      // Process each month's contribution
+                      chartData.forEach(data => {
+                        const [, year] = data.date.split('-').map(Number);
+                        
+                        // Get multiplier based on time period
+                        let multiplier;
+                        if (year >= 2025) multiplier = 1.45;
+                        else if (year >= 2004) multiplier = 1.35;
+                        else multiplier = 1.45;
+                        
+                        const grossSalary = data.nominal * multiplier;
+                        const govContribution = grossSalary - data.nominal;
+                        
+                        totalGovContribution += govContribution;
+                        totalMonths++;
+                      });
+                      
+                      const years = Math.floor(totalMonths / 12);
+                      const months = totalMonths % 12;
+                      
+                      return (
+                        <div className="mt-3 space-y-2">
+                          <p className="text-2xl font-bold text-red-600">
+                            {Math.round(totalGovContribution).toLocaleString()} RON
+                          </p>
+                          <p className="text-sm text-gray-700">
+                            ⏳ Perioada totală: {years > 0 ? `${years} ani` : ''} {months > 0 ? `${months} luni` : ''}
+                          </p>
+                          <p className="text-xs text-gray-500 italic">
+                            * Calculat folosind următoarele rate pentru salariul brut:
+                            <br />• 1996-2003: 45% peste salariul net
+                            <br />• 2004-2024: 35% peste salariul net
+                            <br />• 2025+: 45% peste salariul net
+                          </p>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                  <div className="border-b border-gray-200 pb-3">
                     <h3 className="text-base font-semibold text-gray-800 mb-2">⚖️ Puterea de Cumpărare: Atunci vs. Acum</h3>
                     <p className="text-sm text-gray-600">
                       🔍 <span className="font-medium">Comparație:</span> Ce puteai cumpăra cu primul tău salariu vs. astăzi
