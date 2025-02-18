@@ -671,7 +671,7 @@ const SalaryChart = () => {
                               <React.Fragment>
                                 <br />• 1996 - 2003: 41.5% din salariul net
                                 <br />• 2004 - Oct.2023: 35% din salariul net
-                                <br />• Noi.2023 - Oct.2024: 35% din primii 10.000 RON brut, 41.5% din 10.000 RON+
+                                <br />• Noi.2023 - Dec.2024: 35% din primii 10.000 RON brut, 41.5% din 10.000 RON+
                                 <br />• 2025+: 41.5% din salariul net
                               </React.Fragment>
                             ) : (
