@@ -582,8 +582,28 @@ const SalaryChart = () => {
                           <p className="text-2xl font-bold text-red-600">
                             {Math.round(totalGovContribution).toLocaleString()} RON ({Math.round(totalGovContribution / 5).toLocaleString()} EUR)
                           </p>
-                          <p className="text-sm text-gray-700">
-                            ⏳ In total (nu doar pentru stat) ai muncit: {years > 0 ? `${years} ani` : ''} {months > 0 ? `${months} luni` : ''}
+                          <p className="text-lg font-bold text-blue-700">
+                            ⏳ Din {years > 0 ? `${years} ani` : ''} {months > 0 ? `și ${months} luni` : ''} munciți,
+                          </p>
+                          <p className="text-xl font-bold text-red-600">
+                            {(() => {
+                              // Calculate hours worked for state based on tax percentages
+                              let stateMonths = 0;
+                              
+                              chartData.forEach(data => {
+                                const [, year] = data.date.split('-').map(Number);
+                                // Get tax percentage based on year
+                                const taxPercentage = year >= 2025 ? 0.45 :
+                                                    year >= 2004 ? 0.35 : 0.45;
+                                // Add fractional month based on tax percentage (assuming 8h workday)
+                                stateMonths += taxPercentage;
+                              });
+                              
+                              const stateYears = Math.floor(stateMonths / 12);
+                              const stateMonthsRemainder = Math.round(stateMonths % 12);
+                              
+                              return `⚠️ ${stateYears > 0 ? `${stateYears} ani` : ''} ${stateMonthsRemainder > 0 ? `${stateMonthsRemainder} luni` : ''} au fost pentru stat!`;
+                            })()}
                           </p>
                           <p className="text-xs text-gray-500 italic">
                             * Calculat folosind următoarele rate pentru salariul brut:
