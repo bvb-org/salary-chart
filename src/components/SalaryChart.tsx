@@ -559,16 +559,34 @@ const SalaryChart = () => {
                       
                       // Process each month's contribution
                       chartData.forEach(data => {
-                        const [, year] = data.date.split('-').map(Number);
+                        // Get tax rates based on time period
+                        let govContribution;
+                        const [currentMonth, currentYear] = data.date.split('-').map(Number);
                         
-                        // Get multiplier based on time period
-                        let multiplier;
-                        if (year >= 2025) multiplier = 1.45;
-                        else if (year >= 2004) multiplier = 1.35;
-                        else multiplier = 1.45;
-                        
-                        const grossSalary = data.nominal * multiplier;
-                        const govContribution = grossSalary - data.nominal;
+                        if (currentYear >= 2025) {
+                          // 2025+: 45% of net
+                          govContribution = data.nominal * 0.45;
+                        } else if (currentYear === 2023 && currentMonth >= 11 || currentYear === 2024) {
+                          // Nov 2023-Dec 2024: Split bracket
+                          // First calculate what gross salary would be at 35% rate
+                          const baseGross = data.nominal * 1.35;
+                          if (baseGross <= 10000) {
+                            // If gross is under 10000, just use 35%
+                            govContribution = data.nominal * 0.35;
+                          } else {
+                            // For amounts over 10000 gross:
+                            // First 10000 at 35%, rest at 45%
+                            const netFor10000 = 10000 / 1.35; // Net salary for 10000 gross at 35%
+                            const remainingNet = data.nominal - netFor10000;
+                            govContribution = (netFor10000 * 0.35) + (remainingNet * 0.45);
+                          }
+                        } else if (currentYear >= 2004) {
+                          // 2004-Oct 2023: 35% of net
+                          govContribution = data.nominal * 0.35;
+                        } else {
+                          // 1996-2003: 45% of net
+                          govContribution = data.nominal * 0.45;
+                        }
                         
                         totalGovContribution += govContribution;
                         totalMonths++;
@@ -606,9 +624,10 @@ const SalaryChart = () => {
                             })()}
                           </p>
                           <p className="text-xs text-gray-500 italic">
-                            * Calculat folosind următoarele rate pentru salariul brut:
-                            <br />• 1996-2003: 45% din salariul net
-                            <br />• 2004-2024: 35% din salariul net
+                            * Calculat folosind următoarele procente pentru salariul brut:
+                            <br />• 1996 - 2003: 45% din salariul net
+                            <br />• 2004 - Oct.2023: 35% din salariul net
+                            <br />• Noi.2023 - Oct.2024: 35% din primii 10.000 RON brut, 45% din 10.000 RON+
                             <br />• 2025+: 45% din salariul net
                             <br />* Valoarea în EUR este o aproximare folosind un curs de schimb de 5 RON = 1 EUR.
                           </p>
