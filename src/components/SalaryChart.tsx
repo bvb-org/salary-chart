@@ -670,10 +670,12 @@ const SalaryChart = () => {
                       🔍 <span className="font-medium">Comparație:</span> Ce puteai cumpăra cu primul tău salariu vs. astăzi
                     </p>
                     <ul className="mt-3 space-y-2 text-sm">
-                      <li className="flex items-center text-gray-700 bg-blue-50 p-2 rounded-md">
-                        <span className="w-48">🛍️ Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
-                        <span className="font-medium text-blue-700">{salaryChanges[0].salary.toLocaleString()} RON</span>
-                      </li>
+                      {salaryChanges.length > 0 && (
+                        <li className="flex items-center text-gray-700 bg-blue-50 p-2 rounded-md">
+                          <span className="w-48">🛍️ Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
+                          <span className="font-medium text-blue-700">{salaryChanges[0].salary.toLocaleString()} RON</span>
+                        </li>
+                      )}
                       <li className="flex items-center text-gray-700 bg-amber-50 p-2 rounded-md">
                         <span className="w-48">💸 Același coș astăzi:</span>
                         <span className="font-medium text-amber-700">{targetValues.initialBasketToday.toLocaleString()} RON</span>
@@ -733,7 +735,7 @@ const SalaryChart = () => {
                         data={chartData}
                         margin={{ top: 30, right: 30, left: 20, bottom: 65 }}
                         onMouseMove={(data) => data.activePayload && setHoveredData(data.activePayload[0].payload)}
-                        onMouseLeave={() => setHoveredData(chartData[chartData.length - 1])}
+                        onMouseLeave={() => chartData.length > 0 && setHoveredData(chartData[chartData.length - 1])}
                       >
                         <defs>
                           <linearGradient id="powerLossArea" x1="0" y1="0" x2="0" y2="1">
@@ -796,44 +798,46 @@ const SalaryChart = () => {
                         />
                       </LineChart>
                     </ResponsiveContainer>
-                    <div className="mt-4 space-y-2 bg-gray-50 p-4 rounded-lg">
-                      <p
-                        key={`date-${(hoveredData || chartData[chartData.length - 1]).date}`}
-                        className="font-bold text-gray-700 mb-2 transform"
-                      >
-                        {(hoveredData || chartData[chartData.length - 1]).date}
-                      </p>
-                      <div className="flex items-center gap-2 text-indigo-600">
-                        <span className="w-3 h-3 rounded-full bg-[#4f46e5]"></span>
-                        <span className="font-medium">💰 Salariul Tău:</span>
-                        <span
-                          key={`nominal-${(hoveredData || chartData[chartData.length - 1]).nominal}`}
-                          className="font-bold animate-[pop_0.2s_ease-out] transform"
+                    {chartData.length > 0 && (
+                      <div className="mt-4 space-y-2 bg-gray-50 p-4 rounded-lg">
+                        <p
+                          key={`date-${(hoveredData || chartData[chartData.length - 1]).date}`}
+                          className="font-bold text-gray-700 mb-2 transform"
                         >
-                          {(hoveredData || chartData[chartData.length - 1]).nominal.toLocaleString()} RON
-                        </span>
+                          {(hoveredData || chartData[chartData.length - 1]).date}
+                        </p>
+                        <div className="flex items-center gap-2 text-indigo-600">
+                          <span className="w-3 h-3 rounded-full bg-[#4f46e5]"></span>
+                          <span className="font-medium">💰 Salariul Tău:</span>
+                          <span
+                            key={`nominal-${(hoveredData || chartData[chartData.length - 1]).nominal}`}
+                            className="font-bold animate-[pop_0.2s_ease-out] transform"
+                          >
+                            {(hoveredData || chartData[chartData.length - 1]).nominal.toLocaleString()} RON
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-emerald-600">
+                          <span className="w-3 h-3 rounded-full bg-[#059669]"></span>
+                          <span className="font-medium">📉 Salariul tău ajustat la inflația începând din {chartData[0].date}:</span>
+                          <span
+                            key={`adjusted-${(hoveredData || chartData[chartData.length - 1]).adjusted}`}
+                            className="font-bold animate-[pop_0.2s_ease-out] transform"
+                          >
+                            {(hoveredData || chartData[chartData.length - 1]).adjusted.toLocaleString()} RON
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-amber-600">
+                          <span className="w-3 h-3 rounded-full bg-[#d97706]"></span>
+                          <span className="font-medium">🎯 Salariul necesar pentru a-ți menține puterea de cumpărare:</span>
+                          <span
+                            key={`target-${(hoveredData || chartData[chartData.length - 1]).maintainPowerTarget}`}
+                            className="font-bold animate-[pop_0.2s_ease-out] transform"
+                          >
+                            {(hoveredData || chartData[chartData.length - 1]).maintainPowerTarget.toLocaleString()} RON
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 text-emerald-600">
-                        <span className="w-3 h-3 rounded-full bg-[#059669]"></span>
-                        <span className="font-medium">📉 Salariul tău ajustat la inflația începând din {chartData[0].date}:</span>
-                        <span
-                          key={`adjusted-${(hoveredData || chartData[chartData.length - 1]).adjusted}`}
-                          className="font-bold animate-[pop_0.2s_ease-out] transform"
-                        >
-                          {(hoveredData || chartData[chartData.length - 1]).adjusted.toLocaleString()} RON
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-amber-600">
-                        <span className="w-3 h-3 rounded-full bg-[#d97706]"></span>
-                        <span className="font-medium">🎯 Salariul necesar pentru a-ți menține puterea de cumpărare:</span>
-                        <span
-                          key={`target-${(hoveredData || chartData[chartData.length - 1]).maintainPowerTarget}`}
-                          className="font-bold animate-[pop_0.2s_ease-out] transform"
-                        >
-                          {(hoveredData || chartData[chartData.length - 1]).maintainPowerTarget.toLocaleString()} RON
-                        </span>
-                      </div>
-                    </div>
+                    )}
                   </>
                 ) : (
                   <div className="h-full flex items-center justify-center text-gray-500 bg-gray-50 rounded-lg">
