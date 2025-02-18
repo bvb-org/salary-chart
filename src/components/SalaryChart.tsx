@@ -578,16 +578,17 @@ const SalaryChart = () => {
                       return (
                         <div className="mt-3 space-y-2">
                           <p className="text-2xl font-bold text-red-600">
-                            {Math.round(totalGovContribution).toLocaleString()} RON
+                            {Math.round(totalGovContribution).toLocaleString()} RON ({Math.round(totalGovContribution / 5).toLocaleString()} EUR)
                           </p>
                           <p className="text-sm text-gray-700">
-                            ⏳ Perioada totală: {years > 0 ? `${years} ani` : ''} {months > 0 ? `${months} luni` : ''}
+                            ⏳ In total (nu doar pentru stat) ai muncit: {years > 0 ? `${years} ani` : ''} {months > 0 ? `${months} luni` : ''}
                           </p>
                           <p className="text-xs text-gray-500 italic">
                             * Calculat folosind următoarele rate pentru salariul brut:
-                            <br />• 1996-2003: 45% peste salariul net
-                            <br />• 2004-2024: 35% peste salariul net
-                            <br />• 2025+: 45% peste salariul net
+                            <br />• 1996-2003: 45% din salariul net
+                            <br />• 2004-2024: 35% din salariul net
+                            <br />• 2025+: 45% din salariul net
+                            <br />* Valoarea în EUR este o aproximare folosind un curs de schimb de 5 RON = 1 EUR.
                           </p>
                         </div>
                       );
@@ -662,8 +663,8 @@ const SalaryChart = () => {
                         </p>
                       )}
                     </div>
-                  </div>
-                  <div className="border-b border-gray-200 pb-3">
+                  </div><hr/>
+                  <br/><div className="border-b border-gray-200 pb-3">
                     <h3 className="text-base font-semibold text-gray-800 mb-2">⚖️ Puterea de Cumpărare: Atunci vs. Acum</h3>
                     <p className="text-sm text-gray-600">
                       🔍 <span className="font-medium">Comparație:</span> Ce puteai cumpăra cu primul tău salariu vs. astăzi
