@@ -306,34 +306,6 @@ const SalaryChart = () => {
     }
 
     if (data.length > 0) {
-      // Ensure we have the last salary change in our data
-      const lastChange = sortedChanges[sortedChanges.length - 1];
-      const lastDataPoint = data[data.length - 1];
-      
-      // If the last data point doesn't match our last salary change, add it
-      if (lastChange.date !== lastDataPoint.date) {
-        const lastChangeDate = new Date(lastChange.date);
-        const monthRate = getInflationRate(lastChangeDate);
-        
-        if (monthRate !== null) {
-          const inflationFactor = 1 + (monthRate / 100 / 12);
-          cumulativeInflation *= inflationFactor;
-          
-          const inflationSinceLastChange = cumulativeInflation / lastChangeCumulativeInflation;
-          const inflationAdjustedSalary = lastChange.salary / cumulativeInflation;
-          const maintainPowerTarget = lastChange.salary * inflationSinceLastChange;
-          
-          data.push({
-            date: `${String(lastChangeDate.getMonth() + 1).padStart(2, '0')}-${lastChangeDate.getFullYear()}`,
-            nominal: lastChange.salary,
-            adjusted: Math.round(inflationAdjustedSalary),
-            maintainPowerTarget: Math.round(maintainPowerTarget),
-            purchasingPowerLoss: Math.round(((lastChange.salary - inflationAdjustedSalary) / lastChange.salary) * 1000) / 10,
-            rate: monthRate
-          });
-        }
-      }
-      
       setChartData(data);
       const finalData = data[data.length - 1];
       // Calculate how much the initial basket (first salary) would cost today
