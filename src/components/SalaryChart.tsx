@@ -583,7 +583,7 @@ const SalaryChart = () => {
                             {Math.round(totalGovContribution).toLocaleString()} RON ({Math.round(totalGovContribution / 5).toLocaleString()} EUR)
                           </p>
                           <p className="text-lg font-bold text-blue-700">
-                            ⏳ Din {years > 0 ? `${years} ${years === 1 ? 'an' : 'ani și '}` : ''} {months > 0 ? `${months} ${months === 1 ? 'lună' : 'luni'}` : ''} munciți,
+                            ⏳ Din {years > 0 ? `${years} ${years === 1 ? 'an' : 'ani'}` : ''} {months > 0 ? `${months} ${months === 1 ? 'lună' : 'luni'}` : ''} munciți,
                           </p>
                           <p className="text-xl font-bold text-red-600">
                             {(() => {
@@ -602,7 +602,7 @@ const SalaryChart = () => {
                               const stateYears = Math.floor(stateMonths / 12);
                               const stateMonthsRemainder = Math.round(stateMonths % 12);
                               
-                              return `⚠️ ${stateYears > 0 ? `${stateYears} ${stateYears === 1 ? 'an' : 'ani și'}` : ''} ${stateMonthsRemainder > 0 ? `${stateMonthsRemainder} ${stateMonthsRemainder === 1 ? 'lună' : 'luni'}` : ''} au fost pentru stat!`;
+                              return `⚠️ ${stateYears > 0 ? `${stateYears} ${stateYears === 1 ? 'an' : 'ani'}` : ''} ${stateMonthsRemainder > 0 ? `${stateMonthsRemainder} ${stateMonthsRemainder === 1 ? 'lună' : 'luni'}` : ''} au fost pentru stat!`;
                             })()}
                           </p>
                           <p className="text-xs text-gray-500 italic">
