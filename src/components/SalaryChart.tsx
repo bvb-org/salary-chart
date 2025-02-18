@@ -625,15 +625,37 @@ const SalaryChart = () => {
                           </p>
                           <p className="text-xl font-bold text-red-600">
                             {(() => {
-                              // Calculate hours worked for state based on tax percentages
+                              // Calculate months worked for state based on tax percentages
                               let stateMonths = 0;
                               
                               chartData.forEach(data => {
-                                const [, year] = data.date.split('-').map(Number);
-                                // Get tax percentage based on year
-                                const taxPercentage = year >= 2025 ? 0.45 :
-                                                    year >= 2004 ? 0.35 : 0.45;
-                                // Add fractional month based on tax percentage (assuming 8h workday)
+                                const [month, year] = data.date.split('-').map(Number);
+                                let taxPercentage;
+                                
+                                if (taxExempt) {
+                                  if (year >= 2025) {
+                                    taxPercentage = 0.45;
+                                  } else if (year === 2023 && month >= 11 || year === 2024) {
+                                    // For Nov 2023-Oct 2024 period with split bracket
+                                    const baseGross = data.nominal * 1.35;
+                                    if (baseGross <= 10000) {
+                                      taxPercentage = 0.35;
+                                    } else {
+                                      // Calculate weighted average for split bracket
+                                      const netFor10000 = 10000 / 1.35;
+                                      const remainingNet = data.nominal - netFor10000;
+                                      taxPercentage = ((netFor10000 * 0.35) + (remainingNet * 0.45)) / data.nominal;
+                                    }
+                                  } else if (year >= 2004) {
+                                    taxPercentage = 0.35;
+                                  } else {
+                                    taxPercentage = 0.45;
+                                  }
+                                } else {
+                                  // Flat 45% when tax exempt is unchecked
+                                  taxPercentage = 0.45;
+                                }
+                                
                                 stateMonths += taxPercentage;
                               });
                               
@@ -644,11 +666,17 @@ const SalaryChart = () => {
                             })()}
                           </p>
                           <p className="text-xs text-gray-500 italic">
-                            * Calculat folosind următoarele procente pentru salariul brut:
-                            <br />• 1996 - 2003: 45% din salariul net
-                            <br />• 2004 - Oct.2023: 35% din salariul net
-                            <br />• Noi.2023 - Oct.2024: 35% din primii 10.000 RON brut, 45% din 10.000 RON+
-                            <br />• 2025+: 45% din salariul net
+                            * Calculat folosind {taxExempt ? 'următoarele procente' : 'un procent constant de 45%'} pentru salariul brut:
+                            {taxExempt ? (
+                              <React.Fragment>
+                                <br />• 1996 - 2003: 45% din salariul net
+                                <br />• 2004 - Oct.2023: 35% din salariul net
+                                <br />• Noi.2023 - Oct.2024: 35% din primii 10.000 RON brut, 45% din 10.000 RON+
+                                <br />• 2025+: 45% din salariul net
+                              </React.Fragment>
+                            ) : (
+                              <> </>
+                            )}
                             <br />* Valoarea în EUR este o aproximare folosind un curs de schimb de 5 RON = 1 EUR.
                           </p>
                         </div>
