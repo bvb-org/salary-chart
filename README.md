@@ -21,7 +21,7 @@ A Next.js application that visualizes salary data and HICP (Harmonised Index of 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/salary-chart.git
+git clone https://github.com/qSharpy/salary-chart.git
 cd salary-chart
 ```
 
