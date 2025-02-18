@@ -192,8 +192,11 @@ const SalaryChart = () => {
     const [startYear, startMonth] = sortedChanges[0].date.split('-').map(Number);
     const startDate = new Date(startYear, startMonth - 1, 1);
 
-    const [endYear, endMonth] = inflationData[inflationData.length - 1].date.split('-').map(Number);
-    const endDate = new Date(endYear, endMonth - 1, 1);
+    // Get the latest date between last salary change and last inflation data
+    const lastSalaryDate = new Date(sortedChanges[sortedChanges.length - 1].date);
+    const lastInflationDate = new Date(inflationData[inflationData.length - 1].date);
+    const endDate = new Date(Math.max(lastSalaryDate.getTime(), lastInflationDate.getTime()));
+    endDate.setDate(1); // Set to first of the month for consistency
 
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
       console.error('Invalid date parsing:', {
@@ -213,9 +216,14 @@ const SalaryChart = () => {
 
     // Function to get current nominal salary for a date
     const getNominalSalary = (currentDate: Date) => {
-      const validChanges = sortedChanges.filter(change => 
-        new Date(change.date) <= currentDate
-      );
+      // Convert current date to YYYY-MM format for comparison
+      const currentYearMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+      
+      // Find the last salary change that matches or is before this date
+      const validChanges = sortedChanges.filter(change => {
+        return change.date <= currentYearMonth;
+      });
+      
       return validChanges.length > 0 ? validChanges[validChanges.length - 1].salary : 0;
     };
 
@@ -250,9 +258,8 @@ const SalaryChart = () => {
 
     // Process each month
     const currentDate = new Date(startDate);
-    // Add one day to endDate to ensure we include the last month
-    const loopEndDate = new Date(endDate);
-    loopEndDate.setDate(loopEndDate.getDate() + 1);
+    // Set endDate to include the month after the last change to ensure we capture everything
+    const loopEndDate = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
     
     let lastChangeSalary = sortedChanges[0].salary;
     
@@ -299,6 +306,34 @@ const SalaryChart = () => {
     }
 
     if (data.length > 0) {
+      // Ensure we have the last salary change in our data
+      const lastChange = sortedChanges[sortedChanges.length - 1];
+      const lastDataPoint = data[data.length - 1];
+      
+      // If the last data point doesn't match our last salary change, add it
+      if (lastChange.date !== lastDataPoint.date) {
+        const lastChangeDate = new Date(lastChange.date);
+        const monthRate = getInflationRate(lastChangeDate);
+        
+        if (monthRate !== null) {
+          const inflationFactor = 1 + (monthRate / 100 / 12);
+          cumulativeInflation *= inflationFactor;
+          
+          const inflationSinceLastChange = cumulativeInflation / lastChangeCumulativeInflation;
+          const inflationAdjustedSalary = lastChange.salary / cumulativeInflation;
+          const maintainPowerTarget = lastChange.salary * inflationSinceLastChange;
+          
+          data.push({
+            date: `${String(lastChangeDate.getMonth() + 1).padStart(2, '0')}-${lastChangeDate.getFullYear()}`,
+            nominal: lastChange.salary,
+            adjusted: Math.round(inflationAdjustedSalary),
+            maintainPowerTarget: Math.round(maintainPowerTarget),
+            purchasingPowerLoss: Math.round(((lastChange.salary - inflationAdjustedSalary) / lastChange.salary) * 1000) / 10,
+            rate: monthRate
+          });
+        }
+      }
+      
       setChartData(data);
       const finalData = data[data.length - 1];
       // Calculate how much the initial basket (first salary) would cost today
@@ -570,7 +605,7 @@ const SalaryChart = () => {
                       </p>
                       <p className="text-sm text-red-600 mt-1">
                         💡 <span className="font-bold">Calculand inflația de la primul tău salariu,</span><br />
-                        Astăzi, din {targetValues.nominal.toLocaleString()} RON,{' '}
+                        Astăzi, din {chartData[chartData.length - 1].nominal.toLocaleString()} RON,{' '}
                         poți cumpăra bunuri în valoare de doar <span className="font-medium"> {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON</span> 📉
                       </p>
                     </div>
