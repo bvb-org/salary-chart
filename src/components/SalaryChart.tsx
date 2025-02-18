@@ -81,6 +81,7 @@ const SalaryChart = () => {
   const [newDate, setNewDate] = useState('');
   const [newSalary, setNewSalary] = useState('');
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
+  const [taxExempt, setTaxExempt] = useState(true);
   const [targetValues, setTargetValues] = useState<TargetValues>({
     maintainPowerTarget: 0,
     nominal: 0,
@@ -469,13 +470,27 @@ const SalaryChart = () => {
                 </div>
               </div>
 
+              <div className="flex items-center justify-center mb-4">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="taxExempt"
+                    checked={taxExempt}
+                    onChange={(e) => setTaxExempt(e.target.checked)}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                  />
+                  <label htmlFor="taxExempt" className="ml-2 text-sm font-medium text-gray-900">
+                    Scutit impozit
+                  </label>
+                </div>
+              </div>
               <div className="flex gap-4">
                 <button
                   onClick={calculateChart}
                   className="flex-1 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={salaryChanges.length === 0}
                 >
-                  🔍 Analizează Salariul
+                  🔍 Analizează Salariul {taxExempt ? '(Scutit impozit)' : ''}
                 </button>
                 <button
                   onClick={() => {
@@ -561,30 +576,35 @@ const SalaryChart = () => {
                       chartData.forEach(data => {
                         // Get tax rates based on time period
                         let govContribution;
-                        const [currentMonth, currentYear] = data.date.split('-').map(Number);
-                        
-                        if (currentYear >= 2025) {
-                          // 2025+: 45% of net
-                          govContribution = data.nominal * 0.45;
-                        } else if (currentYear === 2023 && currentMonth >= 11 || currentYear === 2024) {
-                          // Nov 2023-Dec 2024: Split bracket
-                          // First calculate what gross salary would be at 35% rate
-                          const baseGross = data.nominal * 1.35;
-                          if (baseGross <= 10000) {
-                            // If gross is under 10000, just use 35%
+                        if (taxExempt) {
+                          const [currentMonth, currentYear] = data.date.split('-').map(Number);
+                          
+                          if (currentYear >= 2025) {
+                            // 2025+: 45% of net
+                            govContribution = data.nominal * 0.45;
+                          } else if (currentYear === 2023 && currentMonth >= 11 || currentYear === 2024) {
+                            // Nov 2023-Dec 2024: Split bracket
+                            // First calculate what gross salary would be at 35% rate
+                            const baseGross = data.nominal * 1.35;
+                            if (baseGross <= 10000) {
+                              // If gross is under 10000, just use 35%
+                              govContribution = data.nominal * 0.35;
+                            } else {
+                              // For amounts over 10000 gross:
+                              // First 10000 at 35%, rest at 45%
+                              const netFor10000 = 10000 / 1.35; // Net salary for 10000 gross at 35%
+                              const remainingNet = data.nominal - netFor10000;
+                              govContribution = (netFor10000 * 0.35) + (remainingNet * 0.45);
+                            }
+                          } else if (currentYear >= 2004) {
+                            // 2004-Oct 2023: 35% of net
                             govContribution = data.nominal * 0.35;
                           } else {
-                            // For amounts over 10000 gross:
-                            // First 10000 at 35%, rest at 45%
-                            const netFor10000 = 10000 / 1.35; // Net salary for 10000 gross at 35%
-                            const remainingNet = data.nominal - netFor10000;
-                            govContribution = (netFor10000 * 0.35) + (remainingNet * 0.45);
+                            // 1996-2003: 45% of net
+                            govContribution = data.nominal * 0.45;
                           }
-                        } else if (currentYear >= 2004) {
-                          // 2004-Oct 2023: 35% of net
-                          govContribution = data.nominal * 0.35;
                         } else {
-                          // 1996-2003: 45% of net
+                          // Flat 45% tax rate when tax exempt is unchecked
                           govContribution = data.nominal * 0.45;
                         }
                         
