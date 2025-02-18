@@ -345,7 +345,7 @@ const SalaryChart = () => {
                 </p>
                 <div className="bg-blue-50 p-3 rounded-md">
                   <p className="text-sm text-blue-700">
-                    🔒 Datele tale sunt în siguranță! Toate calculele se fac direct în browser-ul tău, iar noi nu colectăm, nu stocăm și nu transmitem niciun fel de date personale. Poți verifica asta în codul sursă al aplicației.
+                    🔒 Datele tale sunt în siguranță! Toate calculele se fac direct în browser-ul tău, iar noi nu colectăm, nu stocăm și nu transmitem niciun fel de date personale. Poți verifica asta în codul sursă al aplicației, <a href="https://github.com/qSharpy/salary-chart">link</a>.
                   </p>
                 </div>
                 <form onSubmit={addSalaryChange} className="space-y-4">
