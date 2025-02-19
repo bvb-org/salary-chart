@@ -708,7 +708,7 @@ const SalaryChart = () => {
                       </p>
                       {chartData.length > 24 && (
                         <div className="space-y-2">
-                          {[3, 2, 1, 0].map(yearsAgo => {
+                          {[4, 3, 2, 1, 0].map(yearsAgo => {
                             const year = new Date().getFullYear() - yearsAgo;
                             
                             const yearData = chartData.filter(data => {
