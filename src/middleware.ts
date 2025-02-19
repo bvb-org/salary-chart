@@ -3,14 +3,18 @@ import { NextResponse, NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   
-  // Forward visit data to our server-side API
-  fetch(`${request.nextUrl.origin}/api/track-visit`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ page: pathname }),
-  }).catch(console.error); // Catch but don't await to avoid blocking
+  try {
+    // Forward visit data to our server-side API
+    await fetch(`${request.nextUrl.protocol}//${request.nextUrl.host}/api/track-visit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ page: pathname }),
+    });
+  } catch (error) {
+    console.error('Error tracking visit:', error);
+  }
 
   const response = NextResponse.next();
   return response;
