@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://salary.gris.ninja/sitemap.xml
