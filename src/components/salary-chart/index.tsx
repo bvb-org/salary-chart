@@ -176,7 +176,7 @@ const SalaryChart = () => {
             <CardTitle className="text-2xl font-bold">
               💰 Calculatorul de Salariu și Inflație
             </CardTitle>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">
+            <p className="text-[var(--muted-foreground)]">
               📊 Salut! Vom analiza împreună cum inflația îți afectează banii, chiar și atunci când primești măriri.
             </p>
             <div className="space-y-6">

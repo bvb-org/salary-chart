@@ -5,17 +5,43 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+  --border: #e5e7eb;
+  --input: #ffffff;
+  --input-border: #d1d5db;
   --indigo-color: #4f46e5;
   --emerald-color: #059669;
   --amber-color: #d97706;
+  --red-background: #fef2f2;
+  --red-border: #fecaca;
+  --red-foreground: #b91c1c;
+  --blue-background: #eff6ff;
+  --blue-border: #bfdbfe;
+  --blue-foreground: #1d4ed8;
 }
 
 .dark {
   --background: #171717;
   --foreground: #ffffff;
+  --card: #1f2937;
+  --card-foreground: #f3f4f6;
+  --muted: #374151;
+  --muted-foreground: #9ca3af;
+  --border: #374151;
+  --input: #1f2937;
+  --input-border: #4b5563;
   --indigo-color: #6366f1;
   --emerald-color: #34d399;
   --amber-color: #fbbf24;
+  --red-background: #7f1d1d;
+  --red-border: #991b1b;
+  --red-foreground: #fca5a5;
+  --blue-background: #1e3a8a;
+  --blue-border: #1d4ed8;
+  --blue-foreground: #93c5fd;
 }
 
 body {

@@ -30,7 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider defaultTheme="system">
+        <ThemeProvider defaultTheme="light">
           <div className="bg-yellow-50 dark:bg-yellow-950 p-2 text-center">
             <p className="text-yellow-800 dark:text-yellow-200">
               ⚠️ România, a doua cea mai mare rată anuală a inflației din UE, în luna Ianuarie, {" "}
