@@ -27,6 +27,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <div className="bg-yellow-50 dark:bg-yellow-950 p-2 text-center">
+          <p className="text-yellow-800 dark:text-yellow-200">
+            ⚠️ România, a doua cea mai mare rată anuală a inflației din UE, în luna Ianuarie, {" "}
+            <a
+              href="https://www.economica.net/romania-pe-locul-doi-in-topul-tarilor-din-ue-cu-cele-mai-ridicate-rate-anuale-ale-inflatiei-in-ianuarie_813089.html"
+              className="underline hover:text-yellow-600 dark:hover:text-yellow-400"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              știre aici
+            </a>
+          </p>
+        </div>
         {children}
       </body>
     </html>
