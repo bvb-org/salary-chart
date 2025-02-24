@@ -10,6 +10,7 @@ A Next.js application that visualizes salary data and HICP (Harmonised Index of 
 - 🔄 Real-time data updates
 - 📱 Responsive design for all devices
 - 🌐 Built with Next.js and TypeScript
+- 📊 Metrics monitoring with Prometheus and Grafana
 
 ## Demo
 
@@ -17,7 +18,9 @@ A Next.js application that visualizes salary data and HICP (Harmonised Index of 
 
 [![Watch the video](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://youtu.be/VIDEO_ID)
 
-## Setup with Docker
+## Setup with Docker Compose
+
+The application comes with a complete stack including the main application, Prometheus for metrics collection, and Grafana for metrics visualization.
 
 1. Clone the repository:
 ```bash
@@ -25,17 +28,36 @@ git clone https://github.com/qSharpy/salary-chart.git
 cd salary-chart
 ```
 
-2. Build the Docker image:
+2. Start the entire stack using Docker Compose:
+```bash
+docker compose up -d
+```
+
+3. Access the services:
+- Main application: http://localhost:3001
+- Prometheus metrics: http://localhost:9090
+- Grafana dashboards: http://localhost:3002
+
+To stop the services:
+```bash
+docker compose down
+```
+
+## Manual Docker Setup
+
+If you want to run just the application without the monitoring stack:
+
+1. Build the Docker image:
 ```bash
 docker build -t salary-chart .
 ```
 
-3. Run the container:
+2. Run the container:
 ```bash
 docker run -p 3000:3000 salary-chart
 ```
 
-4. Open your browser and navigate to:
+3. Open your browser and navigate to:
 ```
 http://localhost:3000
 ```
@@ -66,6 +88,8 @@ http://localhost:3000
 - Tailwind CSS
 - Docker
 - Chart.js
+- Prometheus (metrics collection)
+- Grafana (metrics visualization)
 
 ## Contributing
 
