@@ -5,10 +5,22 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --indigo-color: #4f46e5;
+  --emerald-color: #059669;
+  --amber-color: #d97706;
+}
+
+.dark {
+  --background: #171717;
+  --foreground: #ffffff;
+  --indigo-color: #6366f1;
+  --emerald-color: #34d399;
+  --amber-color: #fbbf24;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

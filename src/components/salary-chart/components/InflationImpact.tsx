@@ -25,23 +25,23 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-      <div className="lg:col-span-2 space-y-4 bg-gray-50 p-4 rounded-lg">
-        <div className="border-b border-gray-200 pb-3">
-          <h3 className="text-base font-semibold text-gray-800 mb-2">💰 Câștiguri Totale din Muncă</h3>
-          <p className="text-sm text-gray-600">
+      <div className="lg:col-span-2 space-y-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+        <div className="border-b border-gray-200 dark:border-gray-700 pb-3">
+          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-2">💰 Câștiguri Totale din Muncă</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
             Suma totală câștigată prin salarii de la prima până la ultima lună:
           </p>
           <p className="text-2xl font-bold text-blue-600 mt-2">
             {lifetimeEarnings.toLocaleString()} RON ({Math.round(lifetimeEarnings / 5).toLocaleString()} EUR)
           </p>
-          <p className="text-xs text-gray-500 mt-1 italic">
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 italic">
             * Această sumă include doar salariile introduse aici, fără bonuri de masă, bonusuri sau alte beneficii.
             <br />* Valoarea în EUR este o aproximare folosind un curs de schimb de 5 RON = 1 EUR.
           </p>
         </div>
-        <div className="border-b border-gray-200 pb-3">
-          <h3 className="text-base font-semibold text-gray-800 mb-2">💸 Cât ai muncit pentru stat?</h3>
-          <p className="text-sm text-gray-600">
+        <div className="border-b border-gray-200 dark:border-gray-700 pb-3">
+          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-2">💸 Cât ai muncit pentru stat?</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-300">
             Contribuția ta la stat, calculată ca diferența între salariul brut și cel net:
           </p>
           <div className="mt-3 space-y-2">
@@ -54,7 +54,7 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
             <p className="text-xl font-bold text-red-600">
               ⚠️ {stateYears > 0 ? `${stateYears} ${stateYears === 1 ? 'an' : 'ani'}` : ''}{stateYears > 0 && stateMonthsRemainder > 0 ? ' și ' : ''}{stateMonthsRemainder > 0 ? `${stateMonthsRemainder} ${stateMonthsRemainder === 1 ? 'lună' : 'luni'}` : ''} au fost pentru stat!
             </p>
-            <p className="text-xs text-gray-500 italic">
+            <p className="text-xs text-gray-500 dark:text-gray-400 italic">
               * Calculat folosind {taxExempt ? 'următoarele procente' : 'un procent constant de 41.5%'} pentru salariul brut:
               {taxExempt ? (
                 <React.Fragment>
@@ -71,26 +71,26 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
           </div>
         </div>
       </div>
-      <div className="lg:col-span-1 p-4 bg-red-50 border border-red-200 rounded-lg h-fit">
-        <h3 className="text-lg font-semibold text-red-700 mb-2 text-center">
+      <div className="lg:col-span-1 p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg h-fit">
+        <h3 className="text-lg font-semibold text-red-700 dark:text-red-300 mb-2 text-center">
           ⚠️ Impactul Inflației
         </h3>
         <div className="space-y-6">
           <div>
-            <p className="text-red-600">
+            <p className="text-red-600 dark:text-red-300">
               📉 Pierdere Putere de Cumpărare:{' '}
               <span className="font-bold text-xl">
                 {chartData[chartData.length - 1].purchasingPowerLoss.toFixed(1)}%
               </span>
             </p>
-            <p className="text-sm text-red-600 mt-1">
+            <p className="text-sm text-red-600 dark:text-red-300 mt-1">
               💡 <span className="font-bold">Calculand inflația de la primul tău salariu,</span><br />
               Astăzi, din {chartData[chartData.length - 1].nominal.toLocaleString()} RON,{' '}
               poți cumpăra bunuri în valoare de doar <span className="font-medium"> {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON</span> 📉
             </p>
           </div>
           <div>
-            <p className="text-gray-700 font-medium mb-2">
+            <p className="text-gray-700 dark:text-gray-200 font-medium mb-2">
               <strong>Ai bătut inflația în ultimii ani?</strong>
             </p>
             {chartData.length > 24 ? (
@@ -119,9 +119,9 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
                           <span className="text-xl">
                             {beatInflation ? '✅' : '❌'}
                           </span>
-                          <span className="font-medium">
+                          <span className="font-medium text-gray-700 dark:text-gray-200">
                             {year}:{' '}
-                            <span className={`font-medium ${beatInflation ? 'text-green-600' : 'text-red-600'}`}>
+                            <span className={`font-medium ${beatInflation ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                               {salaryIncrease > 0 ? '+' : ''}{salaryIncrease.toFixed(1)}% vs. inflație {yearInflation.toFixed(1)}%
                             </span>
                           </span>
@@ -133,25 +133,25 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
                 })}
               </div>
             ) : (
-              <p className="text-sm text-gray-500 italic">
+              <p className="text-sm text-gray-500 dark:text-gray-400 italic">
                 Adaugă date pentru cel puțin 3 ani pentru a vedea analiza completă
               </p>
             )}
           </div>
-          <hr/>
-          <div className="border-b border-gray-200 pb-3">
-            <h3 className="text-base font-semibold text-gray-800 mb-2">⚖️ Puterea de Cumpărare: Atunci vs. Acum</h3>
-            <p className="text-sm text-gray-600">
+          <hr className="border-gray-200 dark:border-gray-700"/>
+          <div className="border-b border-gray-200 dark:border-gray-700 pb-3">
+            <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-2">⚖️ Puterea de Cumpărare: Atunci vs. Acum</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               🔍 <span className="font-medium">Comparație:</span> Ce puteai cumpăra cu primul tău salariu vs. astăzi
             </p>
             <ul className="mt-3 space-y-2 text-sm">
-              <li className="flex items-center text-gray-700 bg-blue-50 p-2 rounded-md">
+              <li className="flex items-center text-gray-700 dark:text-gray-200 bg-blue-50 dark:bg-blue-900/50 p-2 rounded-md">
                 <span className="w-48">🛍️ Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
-                <span className="font-medium text-blue-700">{initialSalary.toLocaleString()} RON</span>
+                <span className="font-medium text-blue-700 dark:text-blue-300">{initialSalary.toLocaleString()} RON</span>
               </li>
-              <li className="flex items-center text-gray-700 bg-amber-50 p-2 rounded-md">
+              <li className="flex items-center text-gray-700 dark:text-gray-200 bg-amber-50 dark:bg-amber-900/50 p-2 rounded-md">
                 <span className="w-48">💸 Același coș astăzi:</span>
-                <span className="font-medium text-amber-700">{initialBasketToday.toLocaleString()} RON</span>
+                <span className="font-medium text-amber-700 dark:text-amber-300">{initialBasketToday.toLocaleString()} RON</span>
               </li>
             </ul>
           </div>

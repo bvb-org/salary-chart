@@ -169,14 +169,14 @@ const SalaryChart = () => {
   };
 
   return (
-    <Card className="w-full max-w-[1400px] mx-auto bg-white shadow-lg">
+    <Card className="w-full max-w-[1400px] mx-auto shadow-lg">
       <div className="space-y-6">
         <div>
           <CardHeader className="space-y-6">
-            <CardTitle className="text-2xl font-bold text-gray-800">
+            <CardTitle className="text-2xl font-bold">
               💰 Calculatorul de Salariu și Inflație
             </CardTitle>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-600 dark:text-gray-300 mt-2">
               📊 Salut! Vom analiza împreună cum inflația îți afectează banii, chiar și atunci când primești măriri.
             </p>
             <div className="space-y-6">
