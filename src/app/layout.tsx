@@ -34,7 +34,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider defaultTheme="light">
-          <div className="sticky top-0 z-50 bg-amber-50 dark:bg-amber-950 border-b border-amber-200 dark:border-amber-900 shadow-sm">
+          <div className="z-50 bg-amber-50 dark:bg-amber-950 border-b border-amber-200 dark:border-amber-900 shadow-sm">
             <div className="container mx-auto py-2 px-4">
               <p className="text-amber-800 dark:text-amber-200 text-sm md:text-base font-medium flex items-center justify-center">
                 <span className="mr-2">⚠️</span>
