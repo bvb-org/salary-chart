@@ -20,21 +20,46 @@ export const SalaryForm: React.FC<SalaryFormProps> = ({
   setTaxExempt
 }) => {
   return (
-    <div className="space-y-4">
-      <p className="text-sm text-[var(--muted-foreground)]">
-        🎯 Introdu istoricul salariului tău. Începe cu primul salariu și adaugă fiecare modificare pe parcurs.
-      </p>
-      <div className="bg-[var(--blue-background)] p-3 rounded-md">
-        <p className="text-sm text-[var(--blue-foreground)]">
-          🔒 Datele tale sunt în siguranță! Toate calculele se fac direct în browser-ul tău, iar noi nu colectăm, nu stocăm și nu transmitem niciun fel de date personale. Poți verifica asta în codul sursă al aplicației, <a href="https://github.com/qSharpy/salary-chart">link</a>.
-        </p>
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold mb-2 flex items-center">
+            <span className="bg-indigo/10 text-indigo p-1.5 rounded-md mr-2">🎯</span>
+            Introdu istoricul salariului tău
+          </h3>
+          <p className="text-muted-foreground">
+            Începe cu primul salariu și adaugă fiecare modificare pe parcurs pentru a vedea impactul inflației în timp.
+          </p>
+        </div>
+        <div className="flex-1">
+          <div className="info-alert flex items-start">
+            <span className="text-blue-foreground mr-2 mt-0.5">🔒</span>
+            <div>
+              <p className="text-sm">
+                <span className="font-medium">Datele tale sunt în siguranță!</span> Toate calculele se fac direct în browser-ul tău, fără a stoca sau transmite date personale.
+              </p>
+              <a
+                href="https://github.com/qSharpy/salary-chart"
+                className="text-xs underline hover:text-indigo transition-colors mt-1 inline-block"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Vezi codul sursă
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-      <form onSubmit={addSalaryChange} className="space-y-4">
-        <div className="flex gap-4 flex-wrap">
-          <div className="flex-1 min-w-[200px]">
-            <label className="block text-sm font-medium text-[var(--foreground)] mb-1">
-              📅 Luna și Anul:
-              <span className="text-[var(--muted-foreground)] text-xs ml-1">(adaugă toate salariile și măririle salariale)</span>
+      
+      <form onSubmit={addSalaryChange} className="bg-card shadow-sm rounded-xl p-6 border border-border animate-slideUp">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-foreground">
+              <span className="flex items-center">
+                <span className="mr-1.5">📅</span>
+                Luna și Anul
+              </span>
+              <span className="text-muted-foreground text-xs block mt-1">Adaugă toate salariile și măririle salariale</span>
             </label>
             <input
               type="month"
@@ -51,50 +76,68 @@ export const SalaryForm: React.FC<SalaryFormProps> = ({
               placeholder="YYYY-MM"
               min="1996-01"
               max={new Date().toISOString().slice(0, 7)}
-              className="w-full border border-[var(--input-border)] rounded-md px-3 py-2 bg-[var(--input)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--indigo-color)] focus:border-[var(--indigo-color)]"
+              className="w-full rounded-md border-input-border bg-input px-3 py-2.5 text-foreground shadow-sm focus:border-indigo focus:ring-2 focus:ring-indigo/50"
               required
             />
           </div>
-          <div className="flex-1 min-w-[200px]">
-            <label className="block text-sm font-medium text-[var(--foreground)] mb-1">
-              💵 Salariul Net:
-              <span className="text-[var(--muted-foreground)] text-xs ml-1">(banii primiți în mână, cu sau fără bonusuri; fii consistent)</span>
+          
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-foreground">
+              <span className="flex items-center">
+                <span className="mr-1.5">💵</span>
+                Salariul Net
+              </span>
+              <span className="text-muted-foreground text-xs block mt-1">Banii primiți în mână, cu sau fără bonusuri</span>
             </label>
             <div className="relative">
               <input
                 type="number"
                 value={newSalary}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setNewSalary(e.target.value)}
-                className="w-full border border-[var(--input-border)] rounded-md px-3 py-2 pr-12 bg-[var(--input)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--indigo-color)] focus:border-[var(--indigo-color)]"
+                className="w-full rounded-md border-input-border bg-input px-3 py-2.5 pr-16 text-foreground shadow-sm focus:border-indigo focus:ring-2 focus:ring-indigo/50"
                 required
               />
-              <span className="absolute right-3 top-2 text-[var(--muted-foreground)]">RON</span>
+              <div className="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none">
+                <span className="text-muted-foreground font-medium">RON</span>
+              </div>
             </div>
           </div>
+          
           <div className="flex items-end">
             <button
               type="submit"
-              className="bg-[var(--indigo-color)] text-white px-6 py-2 rounded-md hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-[var(--indigo-color)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+              className="btn btn-primary w-full py-2.5"
             >
-              ➕ Adaugă
+              <span className="mr-1">➕</span> Adaugă salariu
             </button>
           </div>
         </div>
-      </form>
-      <div className="flex items-center justify-center mb-4">
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="taxExempt"
-            checked={taxExempt}
-            onChange={(e) => setTaxExempt(e.target.checked)}
-            className="w-4 h-4 text-[var(--indigo-color)] bg-[var(--input)] border-[var(--input-border)] rounded focus:ring-[var(--indigo-color)] focus:ring-2"
-          />
-          <label htmlFor="taxExempt" className="ml-2 text-sm font-medium text-[var(--foreground)]">
-            Calcule cu scutire impozit
-          </label>
+        
+        <div className="mt-6 pt-4 border-t border-border">
+          <div className="flex items-center">
+            <div className="relative inline-flex items-center">
+              <input
+                type="checkbox"
+                id="taxExempt"
+                checked={taxExempt}
+                onChange={(e) => setTaxExempt(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-muted rounded-full peer peer-checked:bg-indigo peer-focus:ring-2 peer-focus:ring-indigo/50 transition-colors"></div>
+              <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5"></div>
+            </div>
+            <label htmlFor="taxExempt" className="ml-3 text-sm font-medium text-foreground cursor-pointer">
+              Calcule cu scutire impozit
+            </label>
+            <div className="ml-2 group relative">
+              <span className="text-muted-foreground cursor-help">ℹ️</span>
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-card border border-border rounded-md shadow-md text-xs text-foreground opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity z-10">
+                Activează această opțiune pentru a calcula contribuțiile la stat folosind ratele de impozitare specifice perioadelor istorice.
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

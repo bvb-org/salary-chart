@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, FormEvent, useEffect, useRef } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { SalaryForm } from './components/SalaryForm';
 import { SalaryHistory } from './components/SalaryHistory';
 import { InflationImpact } from './components/InflationImpact';
@@ -17,6 +17,7 @@ const SalaryChart = () => {
   const [newSalary, setNewSalary] = useState('');
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [taxExempt, setTaxExempt] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [targetValues, setTargetValues] = useState<TargetValues>({
     maintainPowerTarget: 0,
     nominal: 0,
@@ -48,6 +49,7 @@ const SalaryChart = () => {
 
   // Load inflation data
   useEffect(() => {
+    setIsLoading(true);
     fetch('/hicp-ro.csv')
       .then(response => response.text())
       .then(csvText => {
@@ -62,8 +64,12 @@ const SalaryChart = () => {
           })
           .filter(item => !isNaN(item.rate));
         setInflationData(data);
+        setIsLoading(false);
       })
-      .catch(error => console.error('Error loading inflation data:', error));
+      .catch(error => {
+        console.error('Error loading inflation data:', error);
+        setIsLoading(false);
+      });
   }, []);
 
   const addSalaryChange = (e: FormEvent) => {
@@ -119,17 +125,22 @@ const SalaryChart = () => {
     }
 
     try {
+      setIsLoading(true);
       const result = calculateChartData(salaryChanges, inflationData, taxExempt);
       setChartData(result.chartData);
       setTargetValues(result.targetValues);
+      setIsLoading(false);
 
       // Scroll to graph section
       if (graphRef.current) {
-        graphRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+          graphRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
       }
     } catch (error) {
       console.error('Error calculating chart data:', error);
       alert('Eroare la procesarea datelor. Te rog încearcă din nou.');
+      setIsLoading(false);
     }
   };
 
@@ -169,50 +180,62 @@ const SalaryChart = () => {
   };
 
   return (
-    <Card className="w-full max-w-[1400px] mx-auto shadow-lg">
-      <div className="space-y-6">
-        <div>
-          <CardHeader className="space-y-6">
-            <CardTitle className="text-2xl font-bold">
-              💰 Calculatorul de Salariu și Inflație
-            </CardTitle>
-            <p className="text-[var(--muted-foreground)]">
-              📊 Salut! Vom analiza împreună cum inflația îți afectează banii, chiar și atunci când primești măriri.
-            </p>
-            <div className="space-y-6">
-              <SalaryForm
-                newDate={newDate}
-                newSalary={newSalary}
-                setNewDate={setNewDate}
-                setNewSalary={setNewSalary}
-                addSalaryChange={addSalaryChange}
-                taxExempt={taxExempt}
-                setTaxExempt={setTaxExempt}
-              />
-
-              <SalaryHistory
-                salaryChanges={salaryChanges}
-                removeSalaryChange={removeSalaryChange}
-                onCalculate={calculateChart}
-                onShareLink={shareLink}
-                taxExempt={taxExempt}
-              />
-
-              {chartData.length > 0 && (
-                <InflationImpact
-                  chartData={chartData}
-                  initialSalary={salaryChanges[0].salary}
-                  initialBasketToday={targetValues.initialBasketToday}
-                  lifetimeEarnings={targetValues.lifetimeEarnings}
-                  taxExempt={taxExempt}
-                />
-              )}
+    <Card variant="elevated" className="w-full mx-auto overflow-hidden">
+      <div className="relative">
+        {isLoading && (
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+            <div className="flex flex-col items-center space-y-4">
+              <div className="w-12 h-12 rounded-full border-4 border-indigo animate-spin border-t-transparent"></div>
+              <p className="text-foreground font-medium">Se procesează datele...</p>
             </div>
-          </CardHeader>
-        </div>
+          </div>
+        )}
+        
+        <CardHeader className="pb-0">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <CardTitle icon="💰">
+                Calculatorul de Salariu și Inflație
+              </CardTitle>
+              <CardDescription className="mt-2 text-base">
+                Analizează cum inflația îți afectează puterea de cumpărare în timp
+              </CardDescription>
+            </div>
+          </div>
+          
+          <div className="space-y-8">
+            <SalaryForm
+              newDate={newDate}
+              newSalary={newSalary}
+              setNewDate={setNewDate}
+              setNewSalary={setNewSalary}
+              addSalaryChange={addSalaryChange}
+              taxExempt={taxExempt}
+              setTaxExempt={setTaxExempt}
+            />
 
-        <div>
-          <CardContent className="pt-6">
+            <SalaryHistory
+              salaryChanges={salaryChanges}
+              removeSalaryChange={removeSalaryChange}
+              onCalculate={calculateChart}
+              onShareLink={shareLink}
+              taxExempt={taxExempt}
+            />
+
+            {chartData.length > 0 && (
+              <InflationImpact
+                chartData={chartData}
+                initialSalary={salaryChanges[0].salary}
+                initialBasketToday={targetValues.initialBasketToday}
+                lifetimeEarnings={targetValues.lifetimeEarnings}
+                taxExempt={taxExempt}
+              />
+            )}
+          </div>
+        </CardHeader>
+
+        <CardContent className="pt-8">
+          <div id="charts" ref={graphRef}>
             <SalaryCharts
               chartData={chartData}
               hoveredData={hoveredData}
@@ -220,8 +243,8 @@ const SalaryChart = () => {
               targetValues={targetValues}
               graphRef={graphRef}
             />
-          </CardContent>
-        </div>
+          </div>
+        </CardContent>
       </div>
     </Card>
   );
