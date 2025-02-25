@@ -38,7 +38,7 @@ export default function RootLayout({
             <div className="container mx-auto py-2 px-4">
               <p className="text-amber-800 dark:text-amber-200 text-sm md:text-base font-medium flex items-center justify-center">
                 <span className="mr-2">⚠️</span>
-                România, a doua cea mai mare rată anuală a inflației din UE, în luna Ianuarie,{" "}
+                România, a doua cea mai mare rată anuală a inflației din UE, în luna Ianuarie.{" "}
                 <a
                   href="https://www.economica.net/romania-pe-locul-doi-in-topul-tarilor-din-ue-cu-cele-mai-ridicate-rate-anuale-ale-inflatiei-in-ianuarie_813089.html"
                   className="ml-1 underline decoration-amber-400 underline-offset-2 hover:text-amber-600 dark:hover:text-amber-300 transition-colors"

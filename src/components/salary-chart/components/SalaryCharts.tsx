@@ -35,7 +35,7 @@ export const SalaryCharts: React.FC<SalaryChartsProps> = ({
 
   return (
     <div className="space-y-10 animate-fadeIn">
-      <div className="bg-card border border-border rounded-xl p-6 shadow-md">
+      <div className="bg-card border border-border rounded-xl p-6 px-3 sm:px-4 md:px-6 shadow-md">
         <h3 className="text-xl font-bold mb-6">
           Evoluția Salariului și Puterii de Cumpărare
         </h3>
@@ -44,7 +44,7 @@ export const SalaryCharts: React.FC<SalaryChartsProps> = ({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={chartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+              margin={{ top: 10, right: 10, left: 0, bottom: 20 }}
               onMouseMove={(data) => data.activePayload && setHoveredData(data.activePayload[0].payload)}
               onMouseLeave={() => setHoveredData(chartData[chartData.length - 1])}
             >
@@ -128,12 +128,18 @@ export const SalaryCharts: React.FC<SalaryChartsProps> = ({
               />
               <Legend
                 verticalAlign="top"
-                height={36}
+                height={72}
+                layout="horizontal"
+                wrapperStyle={{
+                  paddingTop: 0,
+                  paddingBottom: 30,
+                  lineHeight: '1.2em'
+                }}
                 formatter={(value) => {
                   const labels = {
-                    "Salariul Tău": "💰 Salariul Tău",
-                    "Salariul ajustat la inflație": `📉 Salariul ajustat la inflația din ${chartData[0].date}`,
-                    "Salariu necesar": "🎯 Salariu necesar pentru menținerea puterii de cumpărare"
+                    "Salariul Tău": "Salariul Tău",
+                    "Salariul ajustat la inflație": `Salariul ajustat la inflația din ${chartData[0].date}`,
+                    "Salariu necesar": "Salariu necesar pentru menținerea puterii de cumpărare"
                   };
                   return labels[value as keyof typeof labels] || value;
                 }}
@@ -193,7 +199,7 @@ export const SalaryCharts: React.FC<SalaryChartsProps> = ({
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+              margin={{ top: 20, right: 10, left: 0, bottom: 60 }}
               onMouseMove={(data) => data.activePayload && setHoveredData(data.activePayload[0].payload)}
               onMouseLeave={() => setHoveredData(chartData[chartData.length - 1])}
             >
