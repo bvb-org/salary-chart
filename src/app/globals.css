@@ -25,14 +25,14 @@
   --amber-hover: #d97706;
   
   /* Status colors */
-  --red-background: #fef2f2;
-  --red-border: #fee2e2;
+  --red-background: #fde8e8;
+  --red-border: #fbd5d5;
   --red-foreground: #dc2626;
-  --blue-background: #eff6ff;
-  --blue-border: #dbeafe;
+  --blue-background: #e1effe;
+  --blue-border: #c3ddfd;
   --blue-foreground: #2563eb;
-  --green-background: #f0fdf4;
-  --green-border: #dcfce7;
+  --green-background: #def7ec;
+  --green-border: #bcf0da;
   --green-foreground: #16a34a;
   
   /* Shadows */

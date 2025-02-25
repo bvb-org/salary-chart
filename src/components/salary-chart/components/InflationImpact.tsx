@@ -115,40 +115,40 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
       </div>
       
       {/* Right column - Inflation Impact */}
-      <div className="lg:col-span-1 h-fit">
-        <div className="bg-gradient-to-br from-red-background to-red-background/80 border border-red-border rounded-xl p-6 shadow-md animate-slideUp delay-200">
-          <div className="flex items-center justify-center mb-4">
-            <div className="bg-white/10 rounded-full p-2">
-              <h3 className="text-xl font-bold text-white flex items-center">
-                <span className="mr-2">⚠️</span> Impactul Inflației
-              </h3>
+    <div className="lg:col-span-1 h-fit">
+      <div className="bg-gradient-to-br from-red-background to-red-background/80 dark:border-red-border border border-red-border/80 rounded-xl p-6 shadow-md animate-slideUp delay-200">
+        <div className="flex items-center justify-center mb-4">
+          <div className="bg-white/10 dark:bg-white/10 bg-red-foreground/10 rounded-full p-2">
+            <h3 className="text-xl font-bold dark:text-white text-red-foreground flex items-center">
+              <span className="mr-2">⚠️</span> Impactul Inflației
+            </h3>
+          </div>
+        </div>
+        
+        <div className="space-y-6">
+          {/* Purchasing Power Loss */}
+          <div className="bg-white/10 dark:bg-white/10 bg-red-foreground/5 rounded-lg p-4 backdrop-blur-sm">
+            <div className="flex items-center justify-between mb-2">
+              <p className="dark:text-white text-red-foreground font-medium">Pierdere Putere de Cumpărare:</p>
+              <span className="text-2xl font-bold dark:text-white text-red-foreground">
+                {chartData[chartData.length - 1].purchasingPowerLoss.toFixed(1)}%
+              </span>
+            </div>
+            <div className="mt-3 p-3 bg-white/10 dark:bg-white/10 bg-red-foreground/10 rounded-lg">
+              <p className="dark:text-white text-foreground text-sm">
+                <span className="font-bold">Calculând inflația de la primul tău salariu:</span><br />
+                Astăzi, din {chartData[chartData.length - 1].nominal.toLocaleString()} RON,{' '}
+                poți cumpăra bunuri în valoare de doar{' '}
+                <span className="font-bold dark:bg-white/20 bg-red-foreground/20 px-2 py-0.5 rounded">
+                  {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON
+                </span>
+              </p>
             </div>
           </div>
-          
-          <div className="space-y-6">
-            {/* Purchasing Power Loss */}
-            <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-white font-medium">Pierdere Putere de Cumpărare:</p>
-                <span className="text-2xl font-bold text-white">
-                  {chartData[chartData.length - 1].purchasingPowerLoss.toFixed(1)}%
-                </span>
-              </div>
-              <div className="mt-3 p-3 bg-white/10 rounded-lg">
-                <p className="text-white text-sm">
-                  <span className="font-bold">Calculând inflația de la primul tău salariu:</span><br />
-                  Astăzi, din {chartData[chartData.length - 1].nominal.toLocaleString()} RON,{' '}
-                  poți cumpăra bunuri în valoare de doar{' '}
-                  <span className="font-bold bg-white/20 px-2 py-0.5 rounded">
-                    {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON
-                  </span>
-                </p>
-              </div>
-            </div>
             
             {/* Beat Inflation? */}
-            <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-              <p className="text-white font-bold mb-3">
+            <div className="bg-white/10 dark:bg-white/10 bg-red-foreground/5 rounded-lg p-4 backdrop-blur-sm">
+              <p className="dark:text-white text-red-foreground font-bold mb-3">
                 Ai bătut inflația în ultimii ani?
               </p>
               {chartData.length > 24 ? (
@@ -173,14 +173,14 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
                         const beatInflation = salaryIncrease > yearInflation;
                         
                         return (
-                          <div key={year} className="flex items-center p-2 rounded-lg bg-white/5">
+                          <div key={year} className="flex items-center p-2 rounded-lg dark:bg-white/5 bg-red-foreground/5">
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
                               beatInflation ? 'bg-emerald/20 text-emerald' : 'bg-red-foreground/20 text-red-foreground'
                             }`}>
                               {beatInflation ? '✓' : '✗'}
                             </div>
                             <div>
-                              <p className="text-white font-medium">
+                              <p className="dark:text-white text-foreground font-medium">
                                 {year}
                               </p>
                               <p className={`text-sm ${beatInflation ? 'text-emerald' : 'text-red-foreground'}`}>
@@ -195,8 +195,8 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
                   })}
                 </div>
               ) : (
-                <div className="bg-white/5 p-3 rounded-lg">
-                  <p className="text-sm text-white/80 italic">
+                <div className="dark:bg-white/5 bg-red-foreground/5 p-3 rounded-lg">
+                  <p className="text-sm dark:text-white/80 text-foreground/80 italic">
                     Adaugă date pentru cel puțin 3 ani pentru a vedea analiza completă
                   </p>
                 </div>
@@ -204,26 +204,26 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
             </div>
             
             {/* Purchasing Power Comparison */}
-            <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-              <p className="text-white font-bold mb-3">
+            <div className="bg-white/10 dark:bg-white/10 bg-red-foreground/5 rounded-lg p-4 backdrop-blur-sm">
+              <p className="dark:text-white text-red-foreground font-bold mb-3">
                 ⚖️ Puterea de Cumpărare: Atunci vs. Acum
               </p>
               <div className="space-y-3">
-                <div className="flex items-center justify-between bg-blue-background/30 p-3 rounded-lg">
+                <div className="flex items-center justify-between dark:bg-blue-background/30 bg-blue-foreground/10 p-3 rounded-lg">
                   <div className="flex items-center">
                     <span className="mr-2">🛍️</span>
-                    <span className="text-sm text-white">Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
+                    <span className="text-sm dark:text-white text-foreground">Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
                   </div>
-                  <span className="font-bold text-white bg-blue-foreground/20 px-2 py-1 rounded">
+                  <span className="font-bold dark:text-white text-blue-foreground dark:bg-blue-foreground/20 bg-blue-foreground/10 px-2 py-1 rounded">
                     {initialSalary.toLocaleString()} RON
                   </span>
                 </div>
-                <div className="flex items-center justify-between bg-amber/20 p-3 rounded-lg">
+                <div className="flex items-center justify-between dark:bg-amber/20 bg-amber/10 p-3 rounded-lg">
                   <div className="flex items-center">
                     <span className="mr-2">💸</span>
-                    <span className="text-sm text-white">Același coș astăzi:</span>
+                    <span className="text-sm dark:text-white text-foreground">Același coș astăzi:</span>
                   </div>
-                  <span className="font-bold text-white bg-amber/30 px-2 py-1 rounded">
+                  <span className="font-bold dark:text-white text-amber dark:bg-amber/30 bg-amber/20 px-2 py-1 rounded">
                     {initialBasketToday.toLocaleString()} RON
                   </span>
                 </div>

@@ -115,19 +115,21 @@ export const SalaryForm: React.FC<SalaryFormProps> = ({
         
         <div className="mt-6 pt-4 border-t border-border">
           <div className="flex items-center">
-            <div className="relative inline-flex items-center">
-              <input
-                type="checkbox"
-                id="taxExempt"
-                checked={taxExempt}
-                onChange={(e) => setTaxExempt(e.target.checked)}
-                className="sr-only peer"
-              />
-              <div className="w-11 h-6 bg-muted rounded-full peer peer-checked:bg-indigo peer-focus:ring-2 peer-focus:ring-indigo/50 transition-colors"></div>
-              <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5"></div>
-            </div>
-            <label htmlFor="taxExempt" className="ml-3 text-sm font-medium text-foreground cursor-pointer">
-              Calcule cu scutire impozit
+            <label htmlFor="taxExempt" className="flex items-center cursor-pointer">
+              <div className="relative inline-flex items-center">
+                <input
+                  type="checkbox"
+                  id="taxExempt"
+                  checked={taxExempt}
+                  onChange={(e) => setTaxExempt(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-muted rounded-full peer peer-checked:bg-indigo peer-focus:ring-2 peer-focus:ring-indigo/50 transition-colors"></div>
+                <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5"></div>
+              </div>
+              <span className="ml-3 text-sm font-medium text-foreground">
+                Calcule cu scutire impozit
+              </span>
             </label>
             <div className="ml-2 group relative">
               <span className="text-muted-foreground cursor-help">ℹ️</span>
