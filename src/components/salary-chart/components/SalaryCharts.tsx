@@ -36,8 +36,7 @@ export const SalaryCharts: React.FC<SalaryChartsProps> = ({
   return (
     <div className="space-y-10 animate-fadeIn">
       <div className="bg-card border border-border rounded-xl p-6 shadow-md">
-        <h3 className="text-xl font-bold mb-6 flex items-center">
-          <span className="bg-indigo/10 text-indigo p-1.5 rounded-md mr-2">📊</span>
+        <h3 className="text-xl font-bold mb-6">
           Evoluția Salariului și Puterii de Cumpărare
         </h3>
         
@@ -186,8 +185,7 @@ export const SalaryCharts: React.FC<SalaryChartsProps> = ({
       </div>
       
       <div className="bg-card border border-border rounded-xl p-6 shadow-md">
-        <h3 className="text-xl font-bold mb-6 flex items-center">
-          <span className="bg-red-background/50 text-red-foreground p-1.5 rounded-md mr-2">📉</span>
+        <h3 className="text-xl font-bold mb-6">
           Pierderea Puterii de Cumpărare în Timp
         </h3>
         

@@ -20,8 +20,7 @@ export const SalaryHistory: React.FC<SalaryHistoryProps> = ({
     <div className="space-y-6">
       <div className="bg-muted rounded-xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold flex items-center">
-            <span className="bg-indigo/10 text-indigo p-1.5 rounded-md mr-2">📝</span>
+          <h3 className="text-lg font-semibold">
             Istoricul Salariilor
           </h3>
           {salaryChanges.length > 0 && (
