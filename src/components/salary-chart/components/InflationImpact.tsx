@@ -115,115 +115,135 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
       </div>
       
       {/* Right column - Inflation Impact */}
-    <div className="lg:col-span-1 h-fit">
-      <div className="bg-gradient-to-br from-red-background to-red-background/80 dark:border-red-border border border-red-border/80 rounded-xl p-6 shadow-md animate-slideUp delay-200">
-        <div className="flex items-center justify-center mb-4">
-          <div className="bg-white/10 dark:bg-white/10 bg-red-foreground/10 rounded-full p-2">
-            <h3 className="text-xl font-bold dark:text-white text-red-foreground flex items-center">
-              <span className="mr-2">⚠️</span> Impactul Inflației
-            </h3>
+      <div className="lg:col-span-1 space-y-6">
+        {/* Inflation Impact Card */}
+        <div className="stat-card animate-slideUp delay-200">
+          <div className="flex items-start">
+            <div className="bg-red-background text-red-foreground p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-foreground mb-2">⚠️ Impactul Inflației</h3>
+              <p className="text-muted-foreground mb-3">
+                Pierdere Putere de Cumpărare:
+              </p>
+              <div className="bg-card p-4 rounded-lg border border-border mb-3">
+                <p className="text-3xl font-bold text-red-foreground">
+                  {chartData[chartData.length - 1].purchasingPowerLoss.toFixed(1)}%
+                </p>
+              </div>
+              <div className="bg-muted p-3 rounded-lg mb-3">
+                <p className="text-sm">
+                  <span className="font-medium">Calculând inflația de la primul tău salariu:</span><br />
+                  Astăzi, din {chartData[chartData.length - 1].nominal.toLocaleString()} RON,{' '}
+                  poți cumpăra bunuri în valoare de doar{' '}
+                  <span className="font-bold">
+                    {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-        
-        <div className="space-y-6">
-          {/* Purchasing Power Loss */}
-          <div className="bg-white/10 dark:bg-white/10 bg-red-foreground/5 rounded-lg p-4 backdrop-blur-sm">
-            <div className="flex items-center justify-between mb-2">
-              <p className="dark:text-white text-red-foreground font-medium">Pierdere Putere de Cumpărare:</p>
-              <span className="text-2xl font-bold dark:text-white text-red-foreground">
-                {chartData[chartData.length - 1].purchasingPowerLoss.toFixed(1)}%
-              </span>
+
+        {/* Beat Inflation Card */}
+        <div className="stat-card animate-slideUp delay-300">
+          <div className="flex items-start">
+            <div className="bg-amber/20 text-amber p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="20" x2="12" y2="10"></line>
+                <line x1="18" y1="20" x2="18" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="16"></line>
+              </svg>
             </div>
-            <div className="mt-3 p-3 bg-white/10 dark:bg-white/10 bg-red-foreground/10 rounded-lg">
-              <p className="dark:text-white text-foreground text-sm">
-                <span className="font-bold">Calculând inflația de la primul tău salariu:</span><br />
-                Astăzi, din {chartData[chartData.length - 1].nominal.toLocaleString()} RON,{' '}
-                poți cumpăra bunuri în valoare de doar{' '}
-                <span className="font-bold dark:bg-white/20 bg-red-foreground/20 px-2 py-0.5 rounded">
-                  {Math.round(chartData[chartData.length - 1].adjusted).toLocaleString()} RON
-                </span>
-              </p>
-            </div>
-          </div>
-            
-            {/* Beat Inflation? */}
-            <div className="bg-white/10 dark:bg-white/10 bg-red-foreground/5 rounded-lg p-4 backdrop-blur-sm">
-              <p className="dark:text-white text-red-foreground font-bold mb-3">
-                Ai bătut inflația în ultimii ani?
-              </p>
-              {chartData.length > 24 ? (
-                <div className="space-y-3">
-                  {[4, 3, 2, 1, 0].map(yearsAgo => {
-                    const year = new Date().getFullYear() - yearsAgo;
-                    
-                    const yearData = chartData.filter(data => {
-                      const dataYear = parseInt(data.date.split('-')[1]);
-                      return dataYear === year && !isNaN(data.rate);
-                    });
-                    
-                    if (yearData.length > 0) {
-                      const startData = yearData[0];
-                      const endData = yearData[yearData.length - 1];
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-foreground mb-2">📈 Ai bătut inflația în ultimii ani?</h3>
+              <div className="bg-muted p-3 rounded-lg">
+                {chartData.length > 24 ? (
+                  <div className="space-y-3">
+                    {[4, 3, 2, 1, 0].map(yearsAgo => {
+                      const year = new Date().getFullYear() - yearsAgo;
                       
-                      if (startData && endData && startData.nominal && endData.nominal) {
-                        const yearInflation = yearData.reduce((sum, data) => sum + data.rate, 0) / yearData.length;
-                        const firstSalaryOfYear = startData.nominal;
-                        const lastSalaryOfYear = endData.nominal;
-                        const salaryIncrease = ((lastSalaryOfYear / firstSalaryOfYear) - 1) * 100;
-                        const beatInflation = salaryIncrease > yearInflation;
+                      const yearData = chartData.filter(data => {
+                        const dataYear = parseInt(data.date.split('-')[1]);
+                        return dataYear === year && !isNaN(data.rate);
+                      });
+                      
+                      if (yearData.length > 0) {
+                        const startData = yearData[0];
+                        const endData = yearData[yearData.length - 1];
                         
-                        return (
-                          <div key={year} className="flex items-center p-2 rounded-lg dark:bg-white/5 bg-red-foreground/5">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
-                              beatInflation ? 'bg-emerald/20 text-emerald' : 'bg-red-foreground/20 text-red-foreground'
-                            }`}>
-                              {beatInflation ? '✓' : '✗'}
+                        if (startData && endData && startData.nominal && endData.nominal) {
+                          const yearInflation = yearData.reduce((sum, data) => sum + data.rate, 0) / yearData.length;
+                          const firstSalaryOfYear = startData.nominal;
+                          const lastSalaryOfYear = endData.nominal;
+                          const salaryIncrease = ((lastSalaryOfYear / firstSalaryOfYear) - 1) * 100;
+                          const beatInflation = salaryIncrease > yearInflation;
+                          
+                          return (
+                            <div key={year} className="flex items-center p-2 rounded-lg bg-card border border-border">
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
+                                beatInflation ? 'bg-emerald/20 text-emerald' : 'bg-red-foreground/20 text-red-foreground'
+                              }`}>
+                                {beatInflation ? '✓' : '✗'}
+                              </div>
+                              <div>
+                                <p className="font-medium">
+                                  {year}
+                                </p>
+                                <p className={`text-sm ${beatInflation ? 'text-emerald' : 'text-red-foreground'}`}>
+                                  {salaryIncrease > 0 ? '+' : ''}{salaryIncrease.toFixed(1)}% vs. inflație {yearInflation.toFixed(1)}%
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <p className="dark:text-white text-foreground font-medium">
-                                {year}
-                              </p>
-                              <p className={`text-sm ${beatInflation ? 'text-emerald' : 'text-red-foreground'}`}>
-                                {salaryIncrease > 0 ? '+' : ''}{salaryIncrease.toFixed(1)}% vs. inflație {yearInflation.toFixed(1)}%
-                              </p>
-                            </div>
-                          </div>
-                        );
+                          );
+                        }
                       }
-                    }
-                    return null;
-                  })}
-                </div>
-              ) : (
-                <div className="dark:bg-white/5 bg-red-foreground/5 p-3 rounded-lg">
-                  <p className="text-sm dark:text-white/80 text-foreground/80 italic">
+                      return null;
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground italic">
                     Adaugă date pentru cel puțin 3 ani pentru a vedea analiza completă
                   </p>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-            
-            {/* Purchasing Power Comparison */}
-            <div className="bg-white/10 dark:bg-white/10 bg-red-foreground/5 rounded-lg p-4 backdrop-blur-sm">
-              <p className="dark:text-white text-red-foreground font-bold mb-3">
-                ⚖️ Puterea de Cumpărare: Atunci vs. Acum
-              </p>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between dark:bg-blue-background/30 bg-blue-foreground/10 p-3 rounded-lg">
+          </div>
+        </div>
+
+        {/* Purchasing Power Comparison Card */}
+        <div className="stat-card animate-slideUp delay-400">
+          <div className="flex items-start">
+            <div className="bg-blue-background/30 text-blue-foreground p-3 rounded-lg mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"></path>
+                <path d="M16.24 7.76a6 6 0 0 1 0 8.49"></path>
+                <path d="M7.76 7.76a6 6 0 0 0 0 8.49"></path>
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-foreground mb-2">⚖️ Puterea de Cumpărare: Atunci vs. Acum</h3>
+              <div className="space-y-3 mt-3">
+                <div className="flex items-center justify-between bg-card p-3 rounded-lg border border-border">
                   <div className="flex items-center">
                     <span className="mr-2">🛍️</span>
-                    <span className="text-sm dark:text-white text-foreground">Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
+                    <span className="text-muted-foreground">Coș cumpărături în <span className="font-medium">{chartData[0].date}</span>:</span>
                   </div>
-                  <span className="font-bold dark:text-white text-blue-foreground dark:bg-blue-foreground/20 bg-blue-foreground/10 px-2 py-1 rounded">
+                  <span className="font-bold text-blue-foreground">
                     {initialSalary.toLocaleString()} RON
                   </span>
                 </div>
-                <div className="flex items-center justify-between dark:bg-amber/20 bg-amber/10 p-3 rounded-lg">
+                <div className="flex items-center justify-between bg-card p-3 rounded-lg border border-border">
                   <div className="flex items-center">
                     <span className="mr-2">💸</span>
-                    <span className="text-sm dark:text-white text-foreground">Același coș astăzi:</span>
+                    <span className="text-muted-foreground">Același coș astăzi:</span>
                   </div>
-                  <span className="font-bold dark:text-white text-amber dark:bg-amber/30 bg-amber/20 px-2 py-1 rounded">
+                  <span className="font-bold text-amber">
                     {initialBasketToday.toLocaleString()} RON
                   </span>
                 </div>
