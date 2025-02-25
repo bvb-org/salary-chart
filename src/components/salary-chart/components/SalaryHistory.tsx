@@ -44,7 +44,7 @@ export const SalaryHistory: React.FC<SalaryHistoryProps> = ({
                       {percentageChange && (
                         <span className={`text-xs px-2 py-0.5 rounded ${
                           difference > 0
-                            ? 'bg-[var(--emerald-color)] bg-opacity-20 text-[var(--emerald-color)]'
+                            ? 'bg-[var(--emerald-color)] text-white font-medium'
                             : 'bg-[var(--red-background)] text-[var(--red-foreground)]'
                         }`}>
                           {difference > 0 ? '📈 +' : '📉 '}{percentageChange}%

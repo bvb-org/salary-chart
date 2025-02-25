@@ -151,7 +151,7 @@ export const InflationImpact: React.FC<InflationImpactProps> = ({
               </li>
               <li className="flex items-center text-[var(--foreground)] bg-[var(--amber-color)] bg-opacity-10 p-2 rounded-md">
                 <span className="w-48">💸 Același coș astăzi:</span>
-                <span className="font-medium text-[var(--amber-color)]">{initialBasketToday.toLocaleString()} RON</span>
+                <span className="font-medium text-[var(--foreground)] bg-[var(--amber-color)] px-2 py-0.5 rounded">{initialBasketToday.toLocaleString()} RON</span>
               </li>
             </ul>
           </div>
