@@ -65,7 +65,7 @@ export function ThemeToggle() {
       
       {/* Tooltip */}
       <span className="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-2 py-1 rounded bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-800 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-        {theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+        {theme === "dark" ? "Schimba la modul de zi" : "Schimba la modul de noapte"}
       </span>
     </button>
   )
