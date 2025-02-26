@@ -12,7 +12,7 @@ export const Header = () => {
       <div className="flex items-center gap-4">
         {user ? (
           <>
-            <span className="text-sm text-muted-foreground">Bună, {user.email}</span>
+            <span className="text-sm text-muted-foreground">Bună, {user.user_metadata?.full_name?.split(' ').slice(0, -1).join(' ') || 'utilizator'}</span>
             <button onClick={signOut} className="btn btn-primary">Logout</button>
           </>
         ) : (
