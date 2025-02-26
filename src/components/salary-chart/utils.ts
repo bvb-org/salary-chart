@@ -2,8 +2,7 @@ import { SalaryChange, ChartDataPoint, InflationData, TargetValues } from './typ
 
 export const calculateChartData = (
   salaryChanges: SalaryChange[],
-  inflationData: InflationData[],
-  taxExempt: boolean
+  inflationData: InflationData[]
 ): { chartData: ChartDataPoint[]; targetValues: TargetValues } => {
   if (salaryChanges.length === 0 || inflationData.length === 0) {
     return { chartData: [], targetValues: { maintainPowerTarget: 0, nominal: 0, initialBasketToday: 0, lifetimeEarnings: 0 } };

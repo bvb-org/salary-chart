@@ -126,7 +126,7 @@ const SalaryChart = () => {
 
     try {
       setIsLoading(true);
-      const result = calculateChartData(salaryChanges, inflationData, taxExempt);
+      const result = calculateChartData(salaryChanges, inflationData);
       setChartData(result.chartData);
       setTargetValues(result.targetValues);
       setIsLoading(false);
