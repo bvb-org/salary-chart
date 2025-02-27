@@ -205,7 +205,7 @@ const SalaryChart = () => {
   };
 
   return (
-    <Card variant="elevated" className="w-full mx-auto overflow-hidden">
+    <Card variant="elevated" className="w-full mx-auto overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700 rounded-xl">
       <div className="relative">
         {isLoading && (
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
