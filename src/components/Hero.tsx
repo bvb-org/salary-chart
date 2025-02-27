@@ -42,10 +42,10 @@ export const Hero = () => {
 
     // Wave parameters
     const waves = [
-      { y: canvas.height * 0.5, amplitude: 25, frequency: 0.02, speed: 0.03, color: primaryColor },
-      { y: canvas.height * 0.6, amplitude: 20, frequency: 0.03, speed: 0.02, color: secondaryColor },
-      { y: canvas.height * 0.7, amplitude: 15, frequency: 0.01, speed: 0.04, color: accentColor },
-      { y: canvas.height * 0.8, amplitude: 10, frequency: 0.04, speed: 0.01, color: primaryColor },
+      { y: canvas.height * 0.30, amplitude: 25, frequency: 0.02, speed: 0.03, color: primaryColor },
+      { y: canvas.height * 0.35, amplitude: 20, frequency: 0.03, speed: 0.02, color: secondaryColor },
+      { y: canvas.height * 0.40, amplitude: 15, frequency: 0.01, speed: 0.04, color: accentColor },
+      { y: canvas.height * 0.45, amplitude: 10, frequency: 0.04, speed: 0.01, color: primaryColor },
     ];
 
     // Define particle types
