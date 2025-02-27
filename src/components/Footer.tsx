@@ -70,22 +70,22 @@ export const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Informații Legale</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
+                <Link href="/termeni-si-conditii" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
                   Termeni și Condiții
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
+                <Link href="/politica-de-confidentialitate" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
                   Politica de Confidențialitate
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
+                <Link href="/politica-de-cookie-uri" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
                   Politica de Cookie-uri
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
+                <Link href="/gdpr" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
                   GDPR
                 </Link>
               </li>
