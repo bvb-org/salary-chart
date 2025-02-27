@@ -1,74 +1,155 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 
 export const Hero = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas dimensions
+    const resizeCanvas = () => {
+      const { width, height } = canvas.getBoundingClientRect();
+      canvas.width = width * window.devicePixelRatio;
+      canvas.height = height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    };
+
+    // Initial resize
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Check if dark mode is active
+    const isDarkMode = document.documentElement.classList.contains('dark');
+
+    // Define colors based on theme
+    const primaryColor = isDarkMode ? 'rgba(129, 140, 248, 0.6)' : 'rgba(79, 70, 229, 0.3)';
+    const secondaryColor = isDarkMode ? 'rgba(52, 211, 153, 0.4)' : 'rgba(16, 185, 129, 0.2)';
+    const accentColor = isDarkMode ? 'rgba(251, 191, 36, 0.3)' : 'rgba(245, 158, 11, 0.15)';
+
+    // Wave parameters
+    const waves = [
+      { y: canvas.height * 0.5, amplitude: 25, frequency: 0.02, speed: 0.03, color: primaryColor },
+      { y: canvas.height * 0.6, amplitude: 20, frequency: 0.03, speed: 0.02, color: secondaryColor },
+      { y: canvas.height * 0.7, amplitude: 15, frequency: 0.01, speed: 0.04, color: accentColor },
+      { y: canvas.height * 0.8, amplitude: 10, frequency: 0.04, speed: 0.01, color: primaryColor },
+    ];
+
+    // Particles (representing money/coins)
+    const particles: { x: number; y: number; size: number; speed: number; color: string }[] = [];
+    const particleCount = Math.floor(canvas.width / 30); // Adjust based on screen width
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 4 + 1,
+        speed: Math.random() * 1 + 0.5,
+        color: Math.random() > 0.7 ? accentColor : (Math.random() > 0.5 ? primaryColor : secondaryColor)
+      });
+    }
+
+    // Animation variables
+    let animationFrameId: number;
+    let time = 0;
+
+    // Draw function
+    const draw = () => {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw waves
+      waves.forEach(wave => {
+        ctx.beginPath();
+        ctx.moveTo(0, wave.y);
+
+        for (let x = 0; x < canvas.width; x++) {
+          const y = wave.y + Math.sin(x * wave.frequency + time * wave.speed) * wave.amplitude;
+          ctx.lineTo(x, y);
+        }
+
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.lineTo(0, canvas.height);
+        ctx.closePath();
+        ctx.fillStyle = wave.color;
+        ctx.fill();
+      });
+
+      // Draw particles
+      particles.forEach(particle => {
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
+        ctx.fill();
+
+        // Move particles
+        particle.y -= particle.speed;
+        particle.x += Math.sin(time * 0.1) * 0.5;
+
+        // Reset particles that go off screen
+        if (particle.y < -particle.size) {
+          particle.y = canvas.height + particle.size;
+          particle.x = Math.random() * canvas.width;
+        }
+      });
+
+      // Update time
+      time += 0.05;
+
+      // Continue animation
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    // Start animation
+    draw();
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
   return (
-    <div className="relative bg-gradient-to-b from-indigo-50 to-white dark:from-indigo-950 dark:to-background py-16 md:py-24 transition-colors duration-300">
-      <div className="container mx-auto px-4">
+    <div className="relative overflow-hidden py-16 md:py-24 transition-colors duration-300">
+      {/* Animated background canvas */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full -z-10"
+      />
+      
+      <div className="container relative mx-auto px-4 z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl md:text-5xl font-bold text-indigo-900 dark:text-indigo-100 mb-6">
+          <h1 className="text-3xl md:text-5xl font-bold text-indigo-900 dark:text-indigo-100 mb-6 animate-fadeIn">
             Calculează Impactul Inflației Asupra Salariului Tău
           </h1>
-          <p className="text-lg md:text-xl text-slate-700 dark:text-slate-300 mb-8">
+          <p className="text-lg md:text-xl text-slate-700 dark:text-slate-300 mb-8 animate-slideUp">
             Află cât de mult ți-a afectat inflația puterea de cumpărare și ce salariu ai nevoie pentru a-ți menține nivelul de trai.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slideUp" style={{ animationDelay: '0.2s' }}>
+            <Link
               href="#calculator"
-              className="btn btn-primary px-8 py-3 text-base font-medium rounded-lg"
+              className="btn btn-primary px-8 py-3 text-base font-medium rounded-lg shadow-md hover:shadow-lg transition-all"
             >
               Începe Calculul
             </Link>
-            <Link 
+            <Link
               href="#faq"
-              className="btn btn-outline px-8 py-3 text-base font-medium rounded-lg"
+              className="btn btn-outline px-8 py-3 text-base font-medium rounded-lg border border-indigo-300 dark:border-indigo-700 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all"
             >
               Află Mai Multe
             </Link>
           </div>
         </div>
-        
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600 dark:text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Calcul Precis</h3>
-            <p className="text-slate-600 dark:text-slate-300">
-              Folosim date oficiale despre inflație din România pentru a-ți oferi o analiză exactă a puterii tale de cumpărare.
-            </p>
-          </div>
-          
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600 dark:text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Confidențialitate Totală</h3>
-            <p className="text-slate-600 dark:text-slate-300">
-              Toate calculele se fac direct în browser-ul tău. Datele tale salariale nu sunt stocate pe serverele noastre.
-            </p>
-          </div>
-          
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600 dark:text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Vizualizare Grafică</h3>
-            <p className="text-slate-600 dark:text-slate-300">
-              Înțelege evoluția salariului tău în raport cu inflația prin grafice interactive și ușor de înțeles.
-            </p>
-          </div>
-        </div>
       </div>
       
+      {/* Gradient overlay at the bottom */}
       <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent transition-colors duration-300"></div>
     </div>
   );
