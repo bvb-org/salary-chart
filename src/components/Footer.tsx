@@ -55,7 +55,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="https://ec.europa.eu/eurostat/web/hicp/data/database" 
+                  href="https://data.ecb.europa.eu/data/datasets/ICP/ICP.M.RO.N.000000.4.ANR" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors"
