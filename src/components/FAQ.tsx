@@ -13,7 +13,7 @@ const FAQItem = ({ question, answer }: FAQItemProps) => {
   return (
     <div className="border-b border-slate-200 dark:border-slate-700 last:border-0 transition-colors duration-300">
       <button
-        className="flex justify-between items-center w-full py-6 text-left"
+        className="flex justify-between items-center w-full py-6 px-6 text-left"
         onClick={() => setIsOpen(!isOpen)}
       >
         <h3 className="text-lg font-medium text-slate-900 dark:text-white">{question}</h3>
@@ -34,7 +34,7 @@ const FAQItem = ({ question, answer }: FAQItemProps) => {
           isOpen ? "max-h-96 pb-6" : "max-h-0"
         }`}
       >
-        <div className="text-slate-600 dark:text-slate-300 prose dark:prose-invert">
+        <div className="text-slate-600 dark:text-slate-300 prose dark:prose-invert px-6">
           {answer}
         </div>
       </div>
