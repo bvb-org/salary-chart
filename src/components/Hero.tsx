@@ -32,6 +32,13 @@ export const Hero = () => {
     const primaryColor = isDarkMode ? 'rgba(129, 140, 248, 0.6)' : 'rgba(79, 70, 229, 0.3)';
     const secondaryColor = isDarkMode ? 'rgba(52, 211, 153, 0.4)' : 'rgba(16, 185, 129, 0.2)';
     const accentColor = isDarkMode ? 'rgba(251, 191, 36, 0.3)' : 'rgba(245, 158, 11, 0.15)';
+    
+    // Fire-like colors that work in both dark and light mode
+    const fireColors = [
+      isDarkMode ? 'rgba(239, 68, 68, 0.7)' : 'rgba(239, 68, 68, 0.5)', // red
+      isDarkMode ? 'rgba(249, 115, 22, 0.7)' : 'rgba(249, 115, 22, 0.5)', // orange
+      isDarkMode ? 'rgba(234, 179, 8, 0.6)' : 'rgba(234, 179, 8, 0.4)', // yellow
+    ];
 
     // Wave parameters
     const waves = [
@@ -41,17 +48,66 @@ export const Hero = () => {
       { y: canvas.height * 0.8, amplitude: 10, frequency: 0.04, speed: 0.01, color: primaryColor },
     ];
 
-    // Particles (representing money/coins)
-    const particles: { x: number; y: number; size: number; speed: number; color: string }[] = [];
-    const particleCount = Math.floor(canvas.width / 30); // Adjust based on screen width
+    // Define particle types
+    type Particle = {
+      x: number;
+      y: number;
+      size: number;
+      speed: number;
+      color: string;
+      type: 'circle' | 'banknote' | 'fire';
+      rotation?: number;
+      rotationSpeed?: number;
+      width?: number;
+      height?: number;
+      opacity?: number;
+      fadeSpeed?: number;
+    };
 
-    for (let i = 0; i < particleCount; i++) {
+    // Create particles (banknotes and fire particles)
+    const particles: Particle[] = [];
+    const particleCount = Math.floor(canvas.width / 20); // Adjust based on screen width
+
+    // Create banknote particles
+    for (let i = 0; i < particleCount * 0.4; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        width: Math.random() * 15 + 20, // Banknote width
+        height: Math.random() * 5 + 10, // Banknote height
+        size: 1, // Not used for banknotes but kept for type compatibility
+        speed: Math.random() * 1.5 + 0.5,
+        color: Math.random() > 0.5 ? primaryColor : secondaryColor,
+        type: 'banknote',
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.02,
+        opacity: Math.random() * 0.5 + 0.5
+      });
+    }
+
+    // Create regular particles
+    for (let i = 0; i < particleCount * 0.3; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: Math.random() * 4 + 1,
         speed: Math.random() * 1 + 0.5,
-        color: Math.random() > 0.7 ? accentColor : (Math.random() > 0.5 ? primaryColor : secondaryColor)
+        color: Math.random() > 0.7 ? accentColor : (Math.random() > 0.5 ? primaryColor : secondaryColor),
+        type: 'circle'
+      });
+    }
+
+    // Create fire particles
+    for (let i = 0; i < particleCount * 0.3; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: canvas.height + Math.random() * 20,
+        size: Math.random() * 5 + 2,
+        speed: Math.random() * 2 + 1,
+        color: fireColors[Math.floor(Math.random() * fireColors.length)],
+        type: 'fire',
+        opacity: Math.random() * 0.3 + 0.7,
+        fadeSpeed: Math.random() * 0.01 + 0.005
       });
     }
 
@@ -83,20 +139,94 @@ export const Hero = () => {
 
       // Draw particles
       particles.forEach(particle => {
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.fill();
-
-        // Move particles
-        particle.y -= particle.speed;
-        particle.x += Math.sin(time * 0.1) * 0.5;
-
-        // Reset particles that go off screen
-        if (particle.y < -particle.size) {
-          particle.y = canvas.height + particle.size;
-          particle.x = Math.random() * canvas.width;
+        ctx.save();
+        
+        if (particle.type === 'circle') {
+          // Draw regular circular particles
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fillStyle = particle.color;
+          ctx.fill();
+          
+          // Move particles
+          particle.y -= particle.speed;
+          particle.x += Math.sin(time * 0.1) * 0.5;
+          
+          // Reset particles that go off screen
+          if (particle.y < -particle.size) {
+            particle.y = canvas.height + particle.size;
+            particle.x = Math.random() * canvas.width;
+          }
         }
+        else if (particle.type === 'banknote') {
+          // Draw banknote-like particles
+          ctx.translate(particle.x, particle.y);
+          ctx.rotate(particle.rotation!);
+          ctx.globalAlpha = particle.opacity!;
+          
+          // Draw banknote rectangle
+          ctx.fillStyle = particle.color;
+          ctx.fillRect(-particle.width! / 2, -particle.height! / 2, particle.width!, particle.height!);
+          
+          // Add some details to make it look like a banknote
+          ctx.strokeStyle = isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(-particle.width! / 2 + 2, -particle.height! / 2 + 2, particle.width! - 4, particle.height! - 4);
+          
+          // Add a small circle to represent a denomination
+          ctx.beginPath();
+          ctx.arc(particle.width! / 4, 0, particle.height! / 4, 0, Math.PI * 2);
+          ctx.stroke();
+          
+          // Move and rotate banknotes
+          particle.y -= particle.speed * 0.8;
+          particle.x += Math.sin(time * 0.05 + particle.y * 0.01) * 1.2;
+          particle.rotation! += particle.rotationSpeed!;
+          
+          // Reset banknotes that go off screen
+          if (particle.y < -particle.height! * 2) {
+            particle.y = canvas.height + particle.height!;
+            particle.x = Math.random() * canvas.width;
+            particle.opacity = Math.random() * 0.5 + 0.5;
+          }
+        }
+        else if (particle.type === 'fire') {
+          // Draw fire-like particles
+          ctx.globalAlpha = particle.opacity!;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fillStyle = particle.color;
+          ctx.fill();
+          
+          // Add glow effect for fire particles
+          const gradient = ctx.createRadialGradient(
+            particle.x, particle.y, 0,
+            particle.x, particle.y, particle.size * 2
+          );
+          gradient.addColorStop(0, particle.color);
+          gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+          
+          ctx.globalAlpha = particle.opacity! * 0.5;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
+          ctx.fillStyle = gradient;
+          ctx.fill();
+          
+          // Move fire particles
+          particle.y -= particle.speed;
+          particle.x += (Math.random() - 0.5) * 0.8; // Slight random horizontal movement
+          particle.opacity! -= particle.fadeSpeed!;
+          
+          // Reset fire particles that fade out or go off screen
+          if (particle.opacity! <= 0 || particle.y < -particle.size) {
+            particle.y = canvas.height + Math.random() * 20;
+            particle.x = Math.random() * canvas.width;
+            particle.opacity = Math.random() * 0.3 + 0.7;
+            particle.size = Math.random() * 5 + 2;
+          }
+        }
+        
+        ctx.restore();
       });
 
       // Update time
