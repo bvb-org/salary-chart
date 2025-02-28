@@ -7,8 +7,8 @@ on:
 jobs:
   deploy:
     name: Deploy to Raspberry Pi
-    runs-on: self-hosted
-    # This will use the self-hosted runner on the Raspberry Pi
+    runs-on: [self-hosted, bvb-org]
+    # This will use the self-hosted runner at the organization level
 
     steps:
       - name: Checkout code
