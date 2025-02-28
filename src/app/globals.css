@@ -158,4 +158,67 @@
   .text-balance {
     text-wrap: balance;
   }
+  
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400;
+  }
+  
+  /* Animations */
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slideUp {
+    animation: slideUp 0.5s ease-out;
+  }
+  
+  .animate-slideIn {
+    animation: slideIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+}
+
+/* SaaS-specific components */
+.feature-card {
+  @apply bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow;
+}
+
+.testimonial-card {
+  @apply bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700;
+}
+
+.pricing-card {
+  @apply bg-white dark:bg-slate-800 p-8 rounded-xl shadow-md border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-all duration-300;
+}
+
+.pricing-card-highlight {
+  @apply bg-gradient-to-b from-indigo-50 to-white dark:from-indigo-900 dark:to-slate-800 p-8 rounded-xl shadow-lg border border-indigo-200 dark:border-indigo-700 hover:shadow-xl transition-all duration-300 relative overflow-hidden;
+}
+
+.pricing-card-highlight::before {
+  content: '';
+  @apply absolute top-0 right-0 bg-indigo-500 text-white px-4 py-1 rounded-bl-lg font-medium text-sm;
+}
+
+.hero-gradient {
+  @apply bg-gradient-to-b from-indigo-50 to-white dark:from-indigo-950 dark:to-background;
+}
+
+.cta-gradient {
+  @apply bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white;
 }

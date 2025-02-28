@@ -1,0 +1,49 @@
+name: Deploy to Raspberry Pi
+
+on:
+  workflow_dispatch:
+    # This allows manual triggering of the workflow
+
+jobs:
+  deploy:
+    name: Deploy to Raspberry Pi
+    runs-on: self-hosted
+    # This will use the self-hosted runner on the Raspberry Pi
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Docker Compose
+        run: |
+          # Ensure Docker and Docker Compose are available
+          docker --version
+          docker compose version
+          
+      - name: Deploy with Docker Compose
+        env:
+          # Pass GitHub secrets to the environment
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          # Build and start the services in detached mode
+          docker compose up --build -d
+          
+      - name: Verify deployment
+        run: |
+          # Check if containers are running
+          docker compose ps
+          
+          # Wait for the application to start (adjust sleep time as needed)
+          sleep 10
+          
+          # Check if the application is responding
+          curl -s http://localhost:3001 > /dev/null
+          if [ $? -eq 0 ]; then
+            echo "✅ Application is running successfully"
+          else
+            echo "❌ Application failed to start properly"
+            docker compose logs salary-chart
+            exit 1
+          fi
