@@ -1,7 +1,12 @@
 version: '3'
 services:
   salary-chart:
-    build: .
+    build:
+      context: .
+      args:
+        - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+        - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
     ports:
       - "3001:3000"
     environment:

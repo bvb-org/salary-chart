@@ -1,6 +1,16 @@
 # Stage 1: Building the application
 FROM node:20-slim AS builder
 
+# Define build arguments
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ARG SUPABASE_SERVICE_KEY
+
+# Set environment variables for build time
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV SUPABASE_SERVICE_KEY=$SUPABASE_SERVICE_KEY
+
 WORKDIR /app
 
 # Copy package files
@@ -18,10 +28,18 @@ RUN npm run build
 # Stage 2: Running the application
 FROM node:20-slim AS runner
 
+# Define build arguments again for the runner stage
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ARG SUPABASE_SERVICE_KEY
+
 WORKDIR /app
 
-# Set environment to production
+# Set environment variables for runtime
 ENV NODE_ENV=production
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV SUPABASE_SERVICE_KEY=$SUPABASE_SERVICE_KEY
 
 # Copy necessary files from builder
 COPY --from=builder /app/public ./public
