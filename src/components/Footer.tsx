@@ -34,12 +34,12 @@ export const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Resurse</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="#calculator" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
+                <Link href="/#calculator" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
                   Calculator Salariu
                 </Link>
               </li>
               <li>
-                <Link href="#faq" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
+                <Link href="/#faq" className="text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white transition-colors">
                   Întrebări Frecvente
                 </Link>
               </li>

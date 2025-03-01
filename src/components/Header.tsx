@@ -36,10 +36,10 @@ export const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="#calculator" className="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 font-medium">
+            <Link href="/#calculator" className="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 font-medium">
               Calculator
             </Link>
-            <Link href="#faq" className="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 font-medium">
+            <Link href="/#faq" className="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 font-medium">
               FAQ
             </Link>
           </nav>
@@ -83,14 +83,14 @@ export const Header = () => {
           <div className="md:hidden mt-4 pb-4 border-t border-slate-200 dark:border-slate-700">
             <nav className="flex flex-col space-y-4 mt-4">
               <Link
-                href="#calculator"
+                href="/#calculator"
                 className="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Calculator
               </Link>
               <Link
-                href="#faq"
+                href="/#faq"
                 className="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
